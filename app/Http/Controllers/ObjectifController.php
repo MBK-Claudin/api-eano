@@ -72,7 +72,7 @@ class ObjectifController extends Controller
     }
 
     public function selectObjectif($id) {
-        $objectif = objectif::with('organisations', 'users')->find($id);
+        $objectif = objectif::with('organisations', 'users', 'programmes')->find($id);
         return response()->json($objectif);
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ObjectifController;
 use App\Http\Controllers\OrganisationCOntroller;
+use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +23,7 @@ Route::get('objectifs', [ObjectifController::class, 'objectifs'])->name('objecti
 Route::get('select/objectif/{id}', [ObjectifController::class, 'selectObjectif'])->name('objectif.select');
 Route::put('edit/objectif/', [ObjectifController::class, 'editObjectif'])->name('objectif.edit');
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif'])->name('objectif.delete');
+
+// Routes Pour les programmes
+Route::get('programmes', [ProgrammeController::class, 'programmes'])->name('programmes');
+Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme'])->name('programme.insert');

@@ -5,29 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class objectif extends Model
+class programme extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'objectif',
-        'secteur',
+        'libelle',
         'date_debut',
         'date_fin',
+        'statut',
         'echeance',
         'taux_execution_physique',
-        'taux_execution_final'
+        'taux_execution_financier'
     ];
 
-    public function organisations (){
-        return $this->belongsToMany(organisation::class)->withPivot('ancrage');
+    public function objectif() {
+        return $this->belongsTo(objectif::class);
     }
 
-    public function users () {
+    public function users(){
         return $this->belongsToMany(User::class)->withPivot('role');
     }
 
-    public function programmes(){
-        return $this->hasMany(programme::class);
+    public function organisations(){
+        return $this->belongsToMany(organisation::class)->withPivot('ancrage');
     }
 }
