@@ -76,4 +76,9 @@ class ProgrammeController extends Controller
 
         return response()->json($programme);
     }
+
+    public function selectProgramme($id){
+        $programme = Programme::with('objectif', 'organisations', 'users')->find($id);
+        return response()->json($programme);
+    }
 }

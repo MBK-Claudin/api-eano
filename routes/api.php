@@ -27,3 +27,5 @@ Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjecti
 // Routes Pour les programmes
 Route::get('programmes', [ProgrammeController::class, 'programmes'])->name('programmes');
 Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme'])->name('programme.insert');
+Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme'])->name('programme.select');
+Route::get('contributeurs', [UserController::class, 'contributeurs'])->name('programme.contributeurs');

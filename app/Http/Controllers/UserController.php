@@ -11,4 +11,9 @@ class UserController extends Controller
         $user = User::all();
         return User::all();
     }
+
+    public function contributeurs(){
+        $user = User::all();
+        return response()->json($user);
+    }
 }
