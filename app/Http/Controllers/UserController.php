@@ -52,9 +52,13 @@ class UserController extends Controller
             $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
             return response()->json($user);
         }else{
-            return response()->json([
-                'message' => 'Organisation non trouvée'
+
+            $organisation = organisation::create([
+                'libelle' => $request->organisations,
             ]);
+            
+            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
+            return response()->json($user);
         }
     }
 }

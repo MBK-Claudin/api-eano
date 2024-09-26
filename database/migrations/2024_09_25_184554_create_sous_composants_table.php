@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('sous_composants', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle');
+            $table->text('libelle');
             $table->foreignIdFor(composant::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

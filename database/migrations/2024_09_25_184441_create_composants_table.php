@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('composants', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle');
+            $table->text('libelle');
             $table->foreignIdFor(budgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

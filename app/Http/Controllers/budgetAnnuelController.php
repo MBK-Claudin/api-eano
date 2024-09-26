@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class budgetAnnuelController extends Controller
 {
     public function insertBudgetAnnuel(Request $request){
+
         $document = $request->file('excel');
         //dd($document);
         $filePath = $document->store('documents', 'local');
@@ -25,13 +26,13 @@ class budgetAnnuelController extends Controller
             'file_url' => $fileUrl,
         ]);
 
-        $ptba->programme_id = $request->id;
+        $ptba->programme_id = $request->programme_id;
         $ptba->save();
 
         Excel::import(new budgetAnnuelImport($ptba->id), $request->file('excel'));
 
         return response()->json([
             'message' => 'Budget Annuel inserted successfully',
-        ]);
+        ], 201);
     }
 }

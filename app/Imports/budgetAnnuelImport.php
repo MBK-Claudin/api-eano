@@ -6,11 +6,13 @@ use App\Models\activiteBudgetAnnuel;
 use App\Models\composant;
 use App\Models\sousComposant;
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToArray;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class budgetAnnuelImport implements ToArray
+class budgetAnnuelImport implements ToArray, WithHeadingRow
 {
     /**
     * @param Collection $collection
@@ -25,12 +27,15 @@ class budgetAnnuelImport implements ToArray
 
     public function array(array $array)
     {
+        //dd($array);
         foreach ($array as $data) {
+            $date_debut = $this->transformExcelDate($data['date_de_debut']);
+            $date_fin = $this->transformExcelDate($data['date_de_fin']);
 
             // Vérifier s'il y a une composante et pas d'activité
             if (!empty($data['composante_sous_composante']) && empty($data['activites'])) {
                 $composant = composant::firstOrCreate(['libelle' => $data['composante_sous_composante']]);
-                $composant->programme_id = $this->programme_id;
+                $composant->budget_annuel_id = $this->programme_id;
                 $composant->save();
             }
 
@@ -50,8 +55,8 @@ class budgetAnnuelImport implements ToArray
                 $budget_fcfa = $data['budget_us'] * 600;
                 $activite = activiteBudgetAnnuel::create([
                     'libelle' => $data['activites'],
-                    'date_debut' => $data['date_de_debut'],
-                    'date_fin' => $data['date_de_fin'],
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
                     'budget_fcfa' => $budget_fcfa,
                     'budget_us' => $data['budget_us'],
                 ]);
@@ -62,12 +67,25 @@ class budgetAnnuelImport implements ToArray
 
             if (!empty($data['responsable'])) {
                 $responsable = User::firstOrCreate([
-                    'nom' => $data['responsable'],
+                    'name' => $data['responsable'],
                     'email' => $data['email']
                 ]);
 
-                $responsable->activiteBudgetAnnuels->attach($activite->id, ['role' => 'Responsable']);
+                $responsable->activiteBudgetAnnuels()->attach($activite->id, ['role' => 'Responsable']);
+                //$activite->users->attach($responsable->id, ['role' => 'Responsable']);
             }
         }
+
+
+    }
+
+    // Fonction pour convertir une date Excel en format MySQL
+    private function transformExcelDate($excelDate)
+    {
+        if (is_numeric($excelDate)) {
+            // Convertir la date Excel en date réelle en ajoutant le nombre de jours à 1900-01-01
+            return Carbon::createFromDate(1900, 1, 1)->addDays($excelDate - 2)->format('Y-m-d');
+        }
+        return null; // Gérer les valeurs non valides si besoin
     }
 }

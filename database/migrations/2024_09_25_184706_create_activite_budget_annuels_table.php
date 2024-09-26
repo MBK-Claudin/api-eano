@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('activite_budget_annuels', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle')->nullable();
+            $table->text('libelle')->nullable();
             $table->decimal('budget_fcfa', 20, 2)->nullable();
             $table->decimal('budget_us', 20, 2)->nullable();
             $table->decimal('montant_decaisser', 20, 2)->nullable();
