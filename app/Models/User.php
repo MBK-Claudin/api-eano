@@ -58,4 +58,12 @@ class User extends Authenticatable
         return $this->belongsToMany(objectif::class)->withPivot('role');
     }
 
+    public function programmes () {
+        return $this->belongsToMany(programme::class)->withPivot('poste');
+    }
+
+    public function activiteBudgetAnnuels () {
+        return $this->belongsToMany(activiteBudgetAnnuel::class)->withPivot('role');
+    }
+
 }

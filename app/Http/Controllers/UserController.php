@@ -2,18 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\organisation;
+use App\Models\programme;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function users () {
-        $user = User::all();
         return User::all();
     }
 
-    public function contributeurs(){
-        $user = User::all();
-        return response()->json($user);
+    public function usersProgramme ($id){
+        $programme = programme::with('users.organisations')->find($id);
+        return response()->json($programme->users);
+    }
+
+    public function insertContributeurs (Request $request) {
+
+        $programme = programme::find($request->programme_id);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
+        
+        if ($request->hasFile('photo')) {
+            // Récupération du fichier uploadé
+            $image = $request->file('photo');
+            
+            // Génération d'un nom unique pour l'image
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            
+            // Déplacement du fichier vers le répertoire public/assets/images
+            $destinationPath = public_path('/assets/images/');
+            $image->move($destinationPath, $imageName);
+
+            // Enregistrement du chemin de l'image (URL) dans la base de données
+            $user->photo_url = asset('/assets/images/' . $imageName);
+        }
+
+        $user->save();
+        $user->programmes()->attach($programme->id, ['role' => $request->role]);
+
+        $organisation = organisation::where('libelle',$request->organisations)->first();
+
+        if($organisation){
+            
+            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
+            return response()->json($user);
+        }else{
+            return response()->json([
+                'message' => 'Organisation non trouvée'
+            ]);
+        }
     }
 }

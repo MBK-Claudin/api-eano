@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\budgetAnnuelController;
 use App\Http\Controllers\ObjectifController;
 use App\Http\Controllers\OrganisationCOntroller;
 use App\Http\Controllers\ProgrammeController;
@@ -12,7 +13,9 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Routes Users
-Route::get('users', [UserController::class, 'users']);
+Route::get('users', [UserController::class, 'users'])->name('users');
+Route::get('users/programme/{id}', [UserController::class, 'usersProgramme'])->name('users.programme');
+Route::post('insert/contributeur/', [UserController::class, 'insertContributeurs'])->name('users.insert');
 
 // Routes Organisations
 Route::get('organisations', [OrganisationCOntroller::class, 'organisations'])->name('organisations.all');
@@ -28,4 +31,7 @@ Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjecti
 Route::get('programmes', [ProgrammeController::class, 'programmes'])->name('programmes');
 Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme'])->name('programme.insert');
 Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme'])->name('programme.select');
-Route::get('contributeurs', [UserController::class, 'contributeurs'])->name('programme.contributeurs');
+Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme'])->name('programme.edit');
+
+// Routes Pour les budgets annuels (PTBA)
+Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel'])->name('budgetannuel.insert');
