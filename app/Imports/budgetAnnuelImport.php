@@ -72,7 +72,6 @@ class budgetAnnuelImport implements ToArray, WithHeadingRow
                 ]);
 
                 $responsable->activiteBudgetAnnuels()->attach($activite->id, ['role' => 'Responsable']);
-                //$activite->users->attach($responsable->id, ['role' => 'Responsable']);
             }
         }
 

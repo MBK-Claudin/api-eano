@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function users () {
-        return User::all();
+        $user = User::all();
+        return response()->json($user);
     }
 
     public function usersProgramme ($id){

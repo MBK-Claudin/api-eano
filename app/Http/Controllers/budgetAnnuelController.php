@@ -13,7 +13,6 @@ class budgetAnnuelController extends Controller
     public function insertBudgetAnnuel(Request $request){
 
         $document = $request->file('excel');
-        //dd($document);
         $filePath = $document->store('documents', 'local');
         $fileUrl = Storage::url($filePath);
 
