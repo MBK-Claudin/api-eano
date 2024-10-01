@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class activiteBudgetAnnuel extends Model
 {
@@ -27,5 +28,9 @@ class activiteBudgetAnnuel extends Model
 
     public function users () {
         return $this->belongsToMany(User::class)->withPivot('role');
+    }
+
+    public function evenements () : HasMany {
+        return $this->hasMany(evenement::class);
     }
 }

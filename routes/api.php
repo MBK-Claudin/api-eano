@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AnoController;
+use App\Http\Controllers\AnoCtontroller;
+use App\Http\Controllers\auth\authAzureController;
 use App\Http\Controllers\budgetAnnuelController;
 use App\Http\Controllers\ObjectifController;
 use App\Http\Controllers\OrganisationCOntroller;
@@ -11,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::get('auth/callback', [authAzureController::class, 'callback']);
 
 // Routes Users
 Route::get('users', [UserController::class, 'users'])->name('users');
@@ -35,3 +40,9 @@ Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme'])->na
 
 // Routes Pour les budgets annuels (PTBA)
 Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel'])->name('budgetannuel.insert');
+Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailBudgetAnnuel']);
+Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
+
+
+// Routes pour les Anos
+Route::post('insert/ano/', [AnoController::class, 'insertAno']);

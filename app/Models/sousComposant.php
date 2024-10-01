@@ -14,10 +14,10 @@ class sousComposant extends Model
     ];
 
     public function composant () {
-        return $this->hasMany(composant::class);
+        return $this->belongsTo(composant::class);
     }
 
     public function activites () {
-        return $this->hasMany(budgetAnnuel::class);
+        return $this->hasMany(activiteBudgetAnnuel::class);
     }
 }

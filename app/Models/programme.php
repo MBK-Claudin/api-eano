@@ -30,4 +30,8 @@ class programme extends Model
     public function organisations(){
         return $this->belongsToMany(organisation::class)->withPivot('ancrage');
     }
+
+    public function budgetannuels (){
+        return $this->hasMany(budgetannuel::class);
+    }
 }

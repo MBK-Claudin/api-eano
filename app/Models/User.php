@@ -66,4 +66,12 @@ class User extends Authenticatable
         return $this->belongsToMany(activiteBudgetAnnuel::class)->withPivot('role');
     }
 
+    public function evenements () {
+        return $this->belongsToMany(evenement::class)->withPivot('role');
+    }
+
+    public function anos () {
+        return $this->belongsToMany(ano::class);
+    }
+
 }

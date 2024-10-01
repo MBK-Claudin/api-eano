@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\budgetAnnuelImport;
 use App\Models\budgetAnnuel;
+use App\Models\programme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -11,7 +12,6 @@ use Maatwebsite\Excel\Facades\Excel;
 class budgetAnnuelController extends Controller
 {
     public function insertBudgetAnnuel(Request $request){
-
         $document = $request->file('excel');
         $filePath = $document->store('documents', 'local');
         $fileUrl = Storage::url($filePath);
@@ -33,5 +33,19 @@ class budgetAnnuelController extends Controller
         return response()->json([
             'message' => 'Budget Annuel inserted successfully',
         ], 201);
+    }
+
+    public function detailBudgetAnnuel ($id){
+        $budget = budgetAnnuel::with('composants.souscomposants.activites')->find($id);
+        $programme = budgetAnnuel::with('programme')->find($id);
+        return response()->json([
+            'budget' => $budget,
+            'programme' => $programme->programme,
+        ]);
+    }
+
+    public function budgetannuels ($id){
+        $programme = programme::find($id);
+        return response()->json($programme->budgetannuels);
     }
 }
