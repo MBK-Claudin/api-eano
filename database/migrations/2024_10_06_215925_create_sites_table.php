@@ -30,15 +30,6 @@ return new class extends Migration
             $table->foreignIdFor(site::class)->constrained()->cascadeOnDelete();
             $table->primary(['activite_id', 'site_id']);
         });
-
-        
-        Schema::create('programme_site', function (Blueprint $table) {
-            $table->foreignIdFor(programme::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(site::class)->constrained()->cascadeOnDelete();
-            $table->primary(['programme_id', 'site_id']);
-        });
-
-
     }
 
     /**
@@ -47,6 +38,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('sites');
-        Schema::dropIfExists('programme_site');
+        Schema::dropIfExists('activite_site');
     }
 };

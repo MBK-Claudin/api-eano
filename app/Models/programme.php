@@ -35,8 +35,4 @@ class programme extends Model
     public function budgetannuels (){
         return $this->hasMany(budgetannuel::class);
     }
-
-    public function sites (): BelongsToMany {
-        return $this->belongsToMany(site::class);
-    }
 }

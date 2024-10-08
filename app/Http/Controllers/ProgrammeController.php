@@ -151,8 +151,23 @@ class ProgrammeController extends Controller
     }
 
     public function sites ($id) {
-        $programme = programme::with('sites')->find($id);
-        return response()->json($programme->sites);
+
+        $livrables = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.sites')
+        ->find($id)
+        ->budgetannuels
+        ->flatMap(function($budgetannuels) {
+            return $budgetannuels->composants->flatMap(function($composants) {
+                return $composants->souscomposants->flatMap(function($souscomposants) {
+                    return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
+                        return $activitesbudgetannuel->activites->flatMap(function($activites){
+                            return $activites->sites;
+                        });
+                    });
+                });
+            });
+        });
+
+        return response()->json($livrables);
     }
 
     public function insertSites(Request $request){
@@ -164,8 +179,6 @@ class ProgrammeController extends Controller
             'coordonnees_gps' => $request->coordonnee,
             'commentaire' => $request->commentaire
         ]);
-
-        $site->programmes()->attach($request->programme_id);
 
         return response()->json($site);
     }

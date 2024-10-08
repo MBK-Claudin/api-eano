@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\AnoController;
-use App\Http\Controllers\AnoCtontroller;
 use App\Http\Controllers\auth\authAzureController;
 use App\Http\Controllers\budgetAnnuelController;
+use App\Http\Controllers\livrableController;
 use App\Http\Controllers\ObjectifController;
 use App\Http\Controllers\OrganisationCOntroller;
 use App\Http\Controllers\ProgrammeController;
@@ -58,3 +58,8 @@ Route::get('ano', [AnoController::class, 'ano']);
 Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);
 Route::get('activite/phases', [ActiviteController::class, 'getPhase']);
 Route::get('activite/sites', [ActiviteController::class, 'getSites']);
+Route::get('activite', [ActiviteController::class, 'getJalon']);
+
+// Routes livrable
+Route::post('insert/livrable', [livrableController::class, 'insertLivrable']);
+Route::get('livrable/{id}', [livrableController::class, 'livrable']);

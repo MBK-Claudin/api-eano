@@ -79,4 +79,8 @@ class User extends Authenticatable
         return $this->belongsToMany(activite::class)->withPivot('role');
     }
 
+    public function livrables () : BelongsToMany {
+        return $this->belongsToMany(livrable::class)->withPivot('role');
+    }
+
 }

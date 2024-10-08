@@ -84,6 +84,8 @@ class AnoController extends Controller
                 $document->file_path = $filePath;
                 $document->file_url = $fileUrl;
                 $document->save();
+
+                $document->anos()->attach($ano->id);
             }
 
             return response()->json([

@@ -24,8 +24,4 @@ class site extends Model
     public function activites(): BelongsToMany {
         return $this->belongsToMany(activite::class);
     }
-
-    public function programmes (): BelongsToMany {
-        return $this->belongsToMany(programme::class);
-    }
 }

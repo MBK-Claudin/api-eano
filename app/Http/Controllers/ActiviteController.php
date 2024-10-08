@@ -64,4 +64,9 @@ class ActiviteController extends Controller
         return response()->json($sites);
     }
 
+    public function getJalon (){
+        $a = activite::all();
+        return response()->json($a);
+    }
+
 }

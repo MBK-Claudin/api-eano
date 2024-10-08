@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class documentAno extends Model
+class documentsLivrable extends Model
 {
     use HasFactory;
 
@@ -15,10 +14,10 @@ class documentAno extends Model
         'titre',
         'file_name',
         'file_path',
-        'file_url'
+        'file_url',
     ];
 
-    public function anos() : BelongsToMany {
-        return $this->belongsToMany(ano::class);
+    public function livrables () : BelongsToMany {
+        return $this->belongsToMany(Livrable::class);
     }
 }
