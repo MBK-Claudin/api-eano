@@ -17,7 +17,7 @@ class sousComposant extends Model
         return $this->belongsTo(composant::class);
     }
 
-    public function activites () {
+    public function activitesbudgetannuel () {
         return $this->hasMany(activiteBudgetAnnuel::class);
     }
 }

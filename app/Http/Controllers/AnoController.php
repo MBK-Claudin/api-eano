@@ -27,7 +27,7 @@ class AnoController extends Controller
         ]);
 
         
-        $activite = activiteBudgetAnnuel::find($request->activite_id)->first();
+        //$activite = activiteBudgetAnnuel::find($request->activite_id)->first();
         $ano = ano::create([
             'budget' => $request->budget
         ]);
@@ -58,6 +58,7 @@ class AnoController extends Controller
                 ]);
                 
                 $newEvent->ano_id = $ano->id;
+                $newEvent->activite_budget_annuel_id = $request->activite_id;
                 $newEvent->save();
 
                 $user->evenements()->attach($newEvent->id, ['role' => 'Responsable']);
@@ -94,5 +95,10 @@ class AnoController extends Controller
             'message' => 'ano non enregistrer !'
         ], 400);
 
+    }
+
+    public function ano () {
+        $ano = ano::with('evenements.users')->get();
+        return response()->json($ano);
     }
 }

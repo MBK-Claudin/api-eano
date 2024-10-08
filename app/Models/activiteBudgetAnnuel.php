@@ -33,4 +33,8 @@ class activiteBudgetAnnuel extends Model
     public function evenements () : HasMany {
         return $this->hasMany(evenement::class);
     }
+
+    public function activites() : HasMany {
+        return $this->hasMany(activite::class);
+    }
 }

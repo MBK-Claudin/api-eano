@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\objectif;
 use App\Models\organisation;
 use App\Models\programme;
+use App\Models\site;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -143,4 +144,30 @@ class ProgrammeController extends Controller
 
         return response()->json($programme);
     }
+
+    public function gantt($id){
+        $planing = programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites')->find($id);
+        return response()->json($planing->budgetannuels);
+    }
+
+    public function sites ($id) {
+        $programme = programme::with('sites')->find($id);
+        return response()->json($programme->sites);
+    }
+
+    public function insertSites(Request $request){
+        $site = site::create([
+            'libelle' => $request->site,
+            'province' => $request->province,
+            'departement' => $request->departement,
+            'ville' => $request->ville,
+            'coordonnees_gps' => $request->coordonnee,
+            'commentaire' => $request->commentaire
+        ]);
+
+        $site->programmes()->attach($request->programme_id);
+
+        return response()->json($site);
+    }
+
 }

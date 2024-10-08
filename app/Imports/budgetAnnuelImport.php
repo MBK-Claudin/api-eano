@@ -27,11 +27,11 @@ class budgetAnnuelImport implements ToArray, WithHeadingRow
 
     public function array(array $array)
     {
-        //dd($array);
+        //dd($this->programme_id);
         foreach ($array as $data) {
             $date_debut = $this->transformExcelDate($data['date_de_debut']);
             $date_fin = $this->transformExcelDate($data['date_de_fin']);
-
+            //dd($this->programme_id);
             // Vérifier s'il y a une composante et pas d'activité
             if (!empty($data['composante_sous_composante']) && empty($data['activites'])) {
                 $composant = composant::firstOrCreate(['libelle' => $data['composante_sous_composante']]);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\AnoController;
 use App\Http\Controllers\AnoCtontroller;
 use App\Http\Controllers\auth\authAzureController;
@@ -37,12 +38,23 @@ Route::get('programmes', [ProgrammeController::class, 'programmes'])->name('prog
 Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme'])->name('programme.insert');
 Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme'])->name('programme.select');
 Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme'])->name('programme.edit');
+Route::get('programme/planing/{id}', [ProgrammeController::class, 'gantt']);
+Route::get('programme/site/{id}', [ProgrammeController::class, 'sites']);
+Route::post('programme/insert/site', [ProgrammeController::class, 'insertSites']);
 
 // Routes Pour les budgets annuels (PTBA)
 Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel'])->name('budgetannuel.insert');
 Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailBudgetAnnuel']);
 Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
+Route::get('budgetannuel/activites', [budgetAnnuelController::class, 'activites']);
+Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activite']);
 
 
 // Routes pour les Anos
 Route::post('insert/ano/', [AnoController::class, 'insertAno']);
+Route::get('ano', [AnoController::class, 'ano']);
+
+// Routes Activités / jalons
+Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);
+Route::get('activite/phases', [ActiviteController::class, 'getPhase']);
+Route::get('activite/sites', [ActiviteController::class, 'getSites']);
