@@ -27,6 +27,7 @@ class livrableController extends Controller
         $livrable = livrable::create([
             'livrable' => $request->livrable
         ]);
+        
         $livrable->activite_id = $request->activite_id;
         $livrable->save();
 

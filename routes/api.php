@@ -43,7 +43,7 @@ Route::get('programme/site/{id}', [ProgrammeController::class, 'sites']);
 Route::post('programme/insert/site', [ProgrammeController::class, 'insertSites']);
 
 // Routes Pour les budgets annuels (PTBA)
-Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel'])->name('budgetannuel.insert');
+Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel']);
 Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailBudgetAnnuel']);
 Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
 Route::get('budgetannuel/activites', [budgetAnnuelController::class, 'activites']);
@@ -53,6 +53,9 @@ Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activi
 // Routes pour les Anos
 Route::post('insert/ano/', [AnoController::class, 'insertAno']);
 Route::get('ano', [AnoController::class, 'ano']);
+Route::get('select/ano/{id}', [AnoController::class, 'selectAno']);
+Route::post('edit/ano', [AnoController::class, 'editAno']);
+Route::delete('delete/ano/{id}', [AnoController::class, 'deleteANO']);
 
 // Routes Activités / jalons
 Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);

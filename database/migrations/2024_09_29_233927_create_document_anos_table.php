@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('document_ano_ano', function (Blueprint $table) {
+        Schema::create('ano_document_ano', function (Blueprint $table) {
             $table->foreignIdFor(ano::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(documentAno::class)->constrained()->cascadeOnDelete();
             $table->primary(['ano_id', 'document_ano_id']);

@@ -38,7 +38,6 @@ class budgetAnnuelController extends Controller
         $ptba->save();
 
         Excel::import(new budgetAnnuelImport($ptba->id), $request->file('excel'));
-        //dd("import pb;;;;;;;;;;;;;;;;;;;;;;;;;;;");
 
         return response()->json([
             'message' => 'Budget Annuel inserted successfully',
@@ -65,7 +64,7 @@ class budgetAnnuelController extends Controller
     }
 
     public function activite ($id) {
-        $activites = activiteBudgetAnnuel::find($id);
+        $activites = activiteBudgetAnnuel::with('activites.users', 'users')->find($id);
         return response()->json($activites);
     }
 

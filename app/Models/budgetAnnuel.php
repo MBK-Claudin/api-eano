@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class budgetAnnuel extends Model
 {
@@ -27,4 +28,5 @@ class budgetAnnuel extends Model
     public function composants () {
         return $this->hasMany(composant::class);
     }
+
 }

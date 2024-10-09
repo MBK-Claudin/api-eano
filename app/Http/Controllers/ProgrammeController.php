@@ -84,6 +84,8 @@ class ProgrammeController extends Controller
     }
 
     public function editProgramme(Request $request){
+        dd($request->all());
+
         $objectif = objectif::where('id', $request->objectif_id)->first();
 
         $programme = Programme::find($request->id);
@@ -181,6 +183,45 @@ class ProgrammeController extends Controller
         ]);
 
         return response()->json($site);
+    }
+
+    public function anos ($id){
+
+        $ano = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.evenements.ano')
+        ->find($id)
+        ->budgetannuels
+        ->flatMap(function($budgetannuels) {
+            return $budgetannuels->composants->flatMap(function($composants) {
+                return $composants->souscomposants->flatMap(function($souscomposants) {
+                    return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
+                        return $activitesbudgetannuel->evenements->flatMap(function($evenements){
+                            return $evenements->ano;
+                        });
+                    });
+                });
+            });
+        });
+
+        return response()->json($ano);
+    }
+
+    public function livrable($id) {
+        $ano = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.livrables')
+        ->find($id)
+        ->budgetannuels
+        ->flatMap(function($budgetannuels) {
+            return $budgetannuels->composants->flatMap(function($composants) {
+                return $composants->souscomposants->flatMap(function($souscomposants) {
+                    return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
+                        return $activitesbudgetannuel->activites->flatMap(function($activites){
+                            return $activites->livrables;
+                        });
+                    });
+                });
+            });
+        });
+
+        return response()->json($ano);
     }
 
 }
