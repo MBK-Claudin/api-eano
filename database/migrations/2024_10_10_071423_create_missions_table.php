@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\activite;
+use App\Models\livrable;
 use App\Models\mission;
 use App\Models\site;
 use App\Models\User;
@@ -44,7 +45,7 @@ return new class extends Migration
 
         Schema::create('mission_livrable', function (Blueprint $table) {
             $table->foreignIdFor(mission::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(site::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(livrable::class)->constrained()->cascadeOnDelete();
             $table->primary(['livrable_id', 'mission_id']);
         });
 
