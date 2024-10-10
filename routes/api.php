@@ -9,6 +9,8 @@ use App\Http\Controllers\ObjectifController;
 use App\Http\Controllers\OrganisationCOntroller;
 use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\FactureController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -66,3 +68,12 @@ Route::get('activite', [ActiviteController::class, 'getJalon']);
 // Routes livrable
 Route::post('insert/livrable', [livrableController::class, 'insertLivrable']);
 Route::get('livrable/{id}', [livrableController::class, 'livrable']);
+
+// Routes pour les contracts
+Route::get('contracts', [ContractController::class, 'contracts']);
+Route::post('insert/contract', [ContractController::class, 'insertContract']);
+
+// Routes pour les factures 
+
+Route::get('factures', [FactureController::class, 'factures']);
+Route::post('insert/facture', [FactureController::class, 'insertFacture']);
