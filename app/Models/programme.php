@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class programme extends Model
 {
@@ -34,5 +35,9 @@ class programme extends Model
 
     public function budgetannuels (){
         return $this->hasMany(budgetannuel::class);
+    }
+
+    public function contract () : HasMany {
+        return $this->hasMany(contract::class);
     }
 }

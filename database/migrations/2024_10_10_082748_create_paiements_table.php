@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\ano;
-use App\Models\documentAno;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('document_anos', function (Blueprint $table) {
+        Schema::create('paiements', function (Blueprint $table) {
             $table->id();
-            $table->string('titre');
-            $table->string('file_name');
-            $table->string('file_path');
-            $table->string('file_url');
-            $table->foreignIdFor(ano::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->string('type_paiement');
+            $table->decimal('montant', 20, 2);
+            $table->date('date_paiement');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('document_anos');
+        Schema::dropIfExists('paiements');
     }
 };

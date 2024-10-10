@@ -19,13 +19,8 @@ return new class extends Migration
             $table->string('file_name');
             $table->string('file_path');
             $table->string('file_url');
+            $table->foreignIdFor(livrable::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
-        });
-
-        Schema::create('documents_livrable_livrable', function (Blueprint $table) {
-            $table->foreignIdFor(documentsLivrable::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(livrable::class)->constrained()->cascadeOnDelete();
-            $table->primary(['documents_livrable_id', 'livrable_id']);
         });
     }
 

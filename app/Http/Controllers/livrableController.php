@@ -60,9 +60,8 @@ class livrableController extends Controller
                 $document->file_name = $file->getClientOriginalName();
                 $document->file_path = $filePath;
                 $document->file_url = $fileUrl;
+                $document->livrable_id = $livrable->id;
                 $document->save();
-
-                $document->livrables()->attach($livrable->id);
             }
             return response()->json([
                 'message' => 'livrable enregistrer !'

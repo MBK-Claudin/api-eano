@@ -28,7 +28,11 @@ class ano extends Model
         return $this->hasMany(evenement::class);
     }
 
-    public function documents() {
-        return $this->belongsToMany(documentAno::class);
+    public function documents() : HasMany {
+        return $this->hasMany(documentAno::class);
+    }
+
+    public function factures () : HasMany {
+        return $this->hasMany(facture::class);
     }
 }

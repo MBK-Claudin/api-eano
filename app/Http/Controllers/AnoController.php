@@ -84,9 +84,8 @@ class AnoController extends Controller
                 $document->file_name = $file->getClientOriginalName();
                 $document->file_path = $filePath;
                 $document->file_url = $fileUrl;
+                $document->ano_id = $ano->id;
                 $document->save();
-
-                $document->anos()->attach($ano->id);
             }
 
             return response()->json([
@@ -190,10 +189,7 @@ class AnoController extends Controller
                     $lastDoc->file_name = $file->getClientOriginalName();
                     $lastDoc->file_path = $filePath;
                     $lastDoc->file_url = $fileUrl;
-
                     $lastDoc->save();
-                    $lastDoc->anos()->detach($ano->id);
-                    $lastDoc->anos()->attach($ano->id);
 
                 }else {
                     $document = new documentAno();
@@ -201,9 +197,8 @@ class AnoController extends Controller
                     $document->file_name = $file->getClientOriginalName();
                     $document->file_path = $filePath;
                     $document->file_url = $fileUrl;
+                    $document->ano_id = $ano->id;
                     $document->save();
-    
-                    $document->anos()->attach($ano->id);
                 }
             }
 

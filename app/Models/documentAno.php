@@ -18,7 +18,7 @@ class documentAno extends Model
         'file_url'
     ];
 
-    public function anos() : BelongsToMany {
-        return $this->belongsToMany(ano::class);
+    public function anos() : BelongsTo {
+        return $this->belongsTo(ano::class);
     }
 }

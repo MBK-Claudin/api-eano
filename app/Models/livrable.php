@@ -15,8 +15,8 @@ class livrable extends Model
         'livrable',
     ];
 
-    public function documents () : BelongsToMany {
-        return $this->belongsToMany(documentsLivrable::class);
+    public function documents () : BelongsTo {
+        return $this->belongsTo(documentsLivrable::class);
     }
 
     public function users () : BelongsToMany {
