@@ -26,4 +26,8 @@ class livrable extends Model
     public function activite() : BelongsTo {
         return $this->belongsTo(activite::class);
     }
+
+    public function missions () : BelongsToMany {
+        return $this->belongsToMany(mission::class);
+    }
 }

@@ -27,6 +27,7 @@ return new class extends Migration
         Schema::create('ano_user', function (Blueprint $table) {
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(ano::class)->constrained()->cascadeOnDelete();
+            $table->string('action')->nullable();
             $table->primary(['ano_id', 'user_id']);
         });
 

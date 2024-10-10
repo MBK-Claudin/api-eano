@@ -37,4 +37,8 @@ class activite extends Model
     public function phase() : BelongsTo {
         return $this->belongsTo(phase::class);
     }
+
+    public function missions () : BelongsToMany {
+        return $this->belongsToMany(mission::class);
+    }
 }

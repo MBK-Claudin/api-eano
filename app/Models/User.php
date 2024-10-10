@@ -72,7 +72,7 @@ class User extends Authenticatable
     }
 
     public function anos () {
-        return $this->belongsToMany(ano::class);
+        return $this->belongsToMany(ano::class)->withPivot('action');
     }
 
     public function activites() : BelongsToMany {
@@ -81,6 +81,10 @@ class User extends Authenticatable
 
     public function livrables () : BelongsToMany {
         return $this->belongsToMany(livrable::class)->withPivot('role');
+    }
+
+    public function missions () : BelongsToMany {
+        return $this->belongsToMany(mission::class)->withPivot('role');
     }
 
 }

@@ -24,4 +24,8 @@ class site extends Model
     public function activites(): BelongsToMany {
         return $this->belongsToMany(activite::class);
     }
+
+    public function missions () : BelongsToMany {
+        return $this->belongsToMany(mission::class);
+    }
 }
