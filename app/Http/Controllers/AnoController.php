@@ -30,7 +30,7 @@ class AnoController extends Controller
         //$activite = activiteBudgetAnnuel::find($request->activite_id)->first();
         $ano = ano::create([
             'budget' => $request->budget,
-            'statut' => 'archive'
+            'statut' => 'En Attente'
         ]);
 
         $ano->users()->attach($request->user_id);
@@ -104,7 +104,7 @@ class AnoController extends Controller
         return response()->json($ano);
     }
 
-    public function selectAno ($id){
+    public function selectEditAno ($id){
         //dd($id);
         $ano = ano::with('documents', 'evenements', 'users')->find($id);
         return response()->json($ano);
@@ -218,5 +218,10 @@ class AnoController extends Controller
         return response()->json([
             'messge' => 'Suppression effectuer avec succès !'
         ]);
+    }
+
+    public function detailAno($id) {
+        $ano = ano::with('documents', 'evenements.users', 'users', 'documents')->find($id);
+        return response()->json($ano);
     }
 }

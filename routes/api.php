@@ -34,7 +34,7 @@ Route::get('objectifs', [ObjectifController::class, 'objectifs'])->name('objecti
 Route::get('select/objectif/{id}', [ObjectifController::class, 'selectObjectif'])->name('objectif.select');
 Route::put('edit/objectif/', [ObjectifController::class, 'editObjectif'])->name('objectif.edit');
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif'])->name('objectif.delete');
-
+Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
 // Routes Pour les programmes
 Route::get('programmes', [ProgrammeController::class, 'programmes'])->name('programmes');
 Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme'])->name('programme.insert');
@@ -43,6 +43,7 @@ Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme'])->na
 Route::get('programme/planing/{id}', [ProgrammeController::class, 'gantt']);
 Route::get('programme/site/{id}', [ProgrammeController::class, 'sites']);
 Route::post('programme/insert/site', [ProgrammeController::class, 'insertSites']);
+Route::delete('delete/programme/{id}', [ProgrammeController::class, 'deleteProgramme']);
 
 // Routes Pour les budgets annuels (PTBA)
 Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel']);
@@ -55,9 +56,10 @@ Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activi
 // Routes pour les Anos
 Route::post('insert/ano/', [AnoController::class, 'insertAno']);
 Route::get('ano', [AnoController::class, 'ano']);
-Route::get('select/ano/{id}', [AnoController::class, 'selectAno']);
+Route::get('select/edit/ano/{id}', [AnoController::class, 'selectEditAno']);
 Route::post('edit/ano', [AnoController::class, 'editAno']);
 Route::delete('delete/ano/{id}', [AnoController::class, 'deleteANO']);
+Route::get('detail/ano/{id}', [AnoController::class, 'detailAno']);
 
 // Routes Activités / jalons
 Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);

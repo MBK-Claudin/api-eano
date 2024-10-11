@@ -224,4 +224,10 @@ class ProgrammeController extends Controller
         return response()->json($ano);
     }
 
+    public function deleteProgramme($id){
+        $programme = programme::find($id);
+        $programme->delete();
+        return response()->json($programme);
+    }
+
 }
