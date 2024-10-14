@@ -40,13 +40,13 @@ class FactureController extends Controller
         ]);
         //dd($facture);
 
-        if($request->input('ano_id')){
-            $facture->ano_id = $request->ano_id;
+        if($request->input('ano')){
+            $facture->ano_id = $request->ano;
             $facture->save();
         }
 
-        if($request->input('contract_id')){
-            $facture->contract_id = $request->contract_id;
+        if($request->input('contract')){
+            $facture->contract_id = $request->contract;
             $facture->save();
         }
 
@@ -55,19 +55,23 @@ class FactureController extends Controller
         if ($request->hasFile('documents')) {
             //return response()->json($documents);
             foreach($request->file('documents') as $index => $file){
-                $filePath = $file->store('documents', 'local');
+                $destinationPath = 'assets/documents';  // Chemin dans le répertoire public
 
-                $titre = $titres[$index];
-
-                // Récupérer le chemin d'accès au fichier
-                $fileUrl = Storage::url($filePath);
+                // Sauvegarder le fichier dans le répertoire public/assets/documents avec le nom original
+                $filePath = $file->move(public_path($destinationPath), $file->getClientOriginalName());
     
-                // Enregistrer les informations du document en base de données
+                // Récupérer le nom du fichier
+                $filename = $file->getClientOriginalName();
+                
+                // Utiliser la fonction asset() pour générer l'URL publique du fichier
+                $fileUrl = asset('assets/documents/' . $filename);
+    
+                // Enregistrer les informations du document dans la base de données
                 $document = new documentFacture();
-                $document->titre = $titre;
-                $document->file_name = $file->getClientOriginalName();
-                $document->file_path = $filePath;
-                $document->file_url = $fileUrl;
+                $document->titre = $titres[$index];
+                $document->file_name = $filename;
+                $document->file_path = $destinationPath . '/' . $filename;
+                $document->file_url = $fileUrl;  // URL générée avec asset()
                 $document->facture_id = $facture->id;
                 $document->save();
             }
@@ -81,5 +85,10 @@ class FactureController extends Controller
             'message' => 'facture non enregistrer !'
         ], 400);
 
+    }
+
+    public function selectFacture($id){
+        $facture = facture::with('documents', 'ano', 'contract')->find($id);
+        return response()->json($facture);
     }
 }

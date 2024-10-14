@@ -37,7 +37,7 @@ class programme extends Model
         return $this->hasMany(budgetannuel::class);
     }
 
-    public function contract () : HasMany {
+    public function contracts () : HasMany {
         return $this->hasMany(contract::class);
     }
 }

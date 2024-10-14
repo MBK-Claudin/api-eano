@@ -64,8 +64,16 @@ class budgetAnnuelController extends Controller
     }
 
     public function activite ($id) {
-        $activites = activiteBudgetAnnuel::with('activites.users', 'users')->find($id);
+        $activites = activiteBudgetAnnuel::with('activites.users', 'users', 'anos.evenements.users')->find($id);
         return response()->json($activites);
+    }
+
+    public function deleteActivite ($id) {
+        $activite = activiteBudgetAnnuel::find($id);
+        $activite->delete();
+        return response()->json([
+            'messge' => "activité du budget annuel supprimer !!!!!"
+        ]);
     }
 
 

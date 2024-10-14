@@ -62,4 +62,16 @@ class UserController extends Controller
             return response()->json($user);
         }
     }
+
+    public function userOrganisation(Request $request){
+        
+        $request->validate([
+            'org' => 'required',
+            'poste' => 'required',
+            'user_id' => 'required'
+        ]);
+
+        $org = organisation::where('libelle', $request->org)->first();
+        $org->users()->attach($request->user_id, ['poste' => $request->poste]);
+    }
 }

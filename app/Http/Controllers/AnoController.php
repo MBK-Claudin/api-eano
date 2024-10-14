@@ -6,6 +6,7 @@ use App\Models\activiteBudgetAnnuel;
 use App\Models\ano;
 use App\Models\documentAno;
 use App\Models\evenement;
+use App\Models\programme;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -32,6 +33,11 @@ class AnoController extends Controller
             'budget' => $request->budget,
             'statut' => 'En Attente'
         ]);
+
+        if($request->input('activite_id')){
+            $ano->activite_budget_annuel_id = $request->activite_id;
+            $ano->save();
+        }
 
         $ano->users()->attach($request->user_id);
 
@@ -71,19 +77,24 @@ class AnoController extends Controller
         if ($request->hasFile('documents')) {
             //return response()->json($documents);
             foreach($request->file('documents') as $index => $file){
-                $filePath = $file->store('documents', 'local');
 
-                $titre = $titres[$index];
+                $destinationPath = 'assets/documents';  // Chemin dans le répertoire public
 
-                // Récupérer le chemin d'accès au fichier
-                $fileUrl = Storage::url($filePath);
+                // Sauvegarder le fichier dans le répertoire public/assets/documents avec le nom original
+                $filePath = $file->move(public_path($destinationPath), $file->getClientOriginalName());
     
-                // Enregistrer les informations du document en base de données
+                // Récupérer le nom du fichier
+                $filename = $file->getClientOriginalName();
+                
+                // Utiliser la fonction asset() pour générer l'URL publique du fichier
+                $fileUrl = asset('assets/documents/' . $filename);
+    
+                // Enregistrer les informations du document dans la base de données
                 $document = new documentAno();
-                $document->titre = $titre;
-                $document->file_name = $file->getClientOriginalName();
-                $document->file_path = $filePath;
-                $document->file_url = $fileUrl;
+                $document->titre = $titres[$index];
+                $document->file_name = $filename;
+                $document->file_path = $destinationPath . '/' . $filename;
+                $document->file_url = $fileUrl;  // URL générée avec asset()
                 $document->ano_id = $ano->id;
                 $document->save();
             }
@@ -176,27 +187,32 @@ class AnoController extends Controller
         if ($request->hasFile('documents')) {
             //return response()->json($documents);
             foreach($request->file('documents') as $index => $file){
-                $filePath = $file->store('documents', 'local');
+                $destinationPath = 'assets/documents';  // Chemin dans le répertoire public
 
-                $titre = $titres[$index];
+                // Sauvegarder le fichier dans le répertoire public/assets/documents avec le nom original
+                $filePath = $file->move(public_path($destinationPath), $file->getClientOriginalName());
+        
+                // Récupérer le nom du fichier
+                $filename = $file->getClientOriginalName();
+                
+                // Utiliser la fonction asset() pour générer l'URL publique du fichier
+                $fileUrl = asset('assets/documents/' . $filename);
 
-                // Récupérer le chemin d'accès au fichier
-                $fileUrl = Storage::url($filePath);
-
-                $lastDoc = documentAno::where('titre', $titre)->first();
+                $lastDoc = documentAno::where('titre', $titres[$index])->first();
                 if($lastDoc){
-                    $lastDoc->titre = $titre;
-                    $lastDoc->file_name = $file->getClientOriginalName();
-                    $lastDoc->file_path = $filePath;
-                    $lastDoc->file_url = $fileUrl;
+                    $lastDoc->titre = $titres[$index];
+                    $lastDoc->file_name = $filename;
+                    $lastDoc->file_path = $destinationPath . '/' . $filename;
+                    $lastDoc->file_url = $fileUrl;  // URL générée avec asset()
+                    $lastDoc->ano_id = $ano->id;
                     $lastDoc->save();
 
                 }else {
                     $document = new documentAno();
-                    $document->titre = $titre;
-                    $document->file_name = $file->getClientOriginalName();
-                    $document->file_path = $filePath;
-                    $document->file_url = $fileUrl;
+                    $document->titre = $titres[$index];
+                    $document->file_name = $filename;
+                    $document->file_path = $destinationPath . '/' . $filename;
+                    $document->file_url = $fileUrl;  // URL générée avec asset()
                     $document->ano_id = $ano->id;
                     $document->save();
                 }
@@ -221,7 +237,24 @@ class AnoController extends Controller
     }
 
     public function detailAno($id) {
-        $ano = ano::with('documents', 'evenements.users', 'users', 'documents')->find($id);
+        $ano = ano::with('documents', 'evenements.users', 'users')->find($id);
+        return response()->json($ano);
+    }
+
+    public function anoProgramme($id){
+        $ano = programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.anos')
+        ->find($id)
+        ->budgetannuels
+        ->flatMap(function($budgetannuels) {
+            return $budgetannuels->composants->flatMap(function($composants) {
+                return $composants->souscomposants->flatMap(function($souscomposants) {
+                    return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
+                        return $activitesbudgetannuel->anos;
+                    });
+                });
+            });
+        });
+
         return response()->json($ano);
     }
 }

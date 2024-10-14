@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\contract;
 use App\Models\documentContract;
+use App\Models\programme;
 use Illuminate\Support\Facades\Storage;
 
 class ContractController extends Controller
@@ -65,9 +66,15 @@ class ContractController extends Controller
         ], 400);
     }
 
-    public function contracts() {
-        $contract = contract::all();
-        return response()->json($contract);
+    public function contracts($id) {
+        $contracts = programme::with('contracts')->find($id);
+        return response()->json($contracts);
+    }
+    public function getContracts (){
+        $contracts = contract::all();
+        return response()->json([
+            'contracts' => $contracts
+        ]);
     }
 
 }

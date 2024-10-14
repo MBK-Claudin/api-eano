@@ -37,10 +37,9 @@ class ActiviteController extends Controller
         $activites->phase_id = $request->phase;
         $activites->save();
 
-        for ($j = 0; $j < count($sites); $j++){
-            $site = User::where('id', $sites[$j])->first();
-            $activites->sites()->attach($site->id);
-        }
+        
+        $site = User::where('id', $sites)->first();
+        $activites->sites()->attach($site->id);
 
         if($emails){
             for ($i = 0; $i < count($emails); $i++){

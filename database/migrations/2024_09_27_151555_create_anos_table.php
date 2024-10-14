@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\activiteBudgetAnnuel;
 use App\Models\ano;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->text('situation_sctuelle')->nullable();
             $table->text('situation_venir')->nullable();
             $table->text('commentaire')->nullable();
+            $table->foreignIdFor(activiteBudgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 

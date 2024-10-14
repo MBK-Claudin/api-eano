@@ -11,6 +11,7 @@ use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\FactureController;
+use App\Http\Controllers\siteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,14 +20,26 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('auth/callback', [authAzureController::class, 'callback']);
+Route::get('logout', [authAzureController::class, 'logout']);
+Route::get('auth/user/{id}', [authAzureController::class, 'authUser']);
 
 // Routes Users
 Route::get('users', [UserController::class, 'users'])->name('users');
 Route::get('users/programme/{id}', [UserController::class, 'usersProgramme'])->name('users.programme');
 Route::post('insert/contributeur/', [UserController::class, 'insertContributeurs'])->name('users.insert');
+Route::post('user/organisation', [UserController::class, 'userOrganisation']);
 
 // Routes Organisations
-Route::get('organisations', [OrganisationCOntroller::class, 'organisations'])->name('organisations.all');
+Route::get('organisations', [OrganisationCOntroller::class, 'organisations']);
+Route::get('participe/organisations', [OrganisationCOntroller::class, 'participeOrganisations']);
+Route::delete('delete/organisations/{id}', [OrganisationCOntroller::class, 'deleteOrganisations']);
+Route::post('insert/organisations/', [OrganisationCOntroller::class, 'insertOrganisations']);
+
+// Route pour les sites
+Route::get('sites', [siteController::class, 'sites']);
+Route::post('insert/site', [siteController::class, 'insertSite']);
+Route::delete('delete/site/{id}', [siteController::class, 'deleteSite']);
+Route::post('edit/site', [siteController::class, 'editSite']);
 
 // Routes Pour les Objectifs stratégiques
 Route::post('insert/objectif/', [ObjectifController::class, 'insertObjectif'])->name('objectif.insert');
@@ -51,6 +64,7 @@ Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailB
 Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
 Route::get('budgetannuel/activites', [budgetAnnuelController::class, 'activites']);
 Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activite']);
+Route::delete('budgetannuel/delete/activite/{id}', [budgetAnnuelController::class, 'deleteActivite']);
 
 
 // Routes pour les Anos
@@ -59,7 +73,8 @@ Route::get('ano', [AnoController::class, 'ano']);
 Route::get('select/edit/ano/{id}', [AnoController::class, 'selectEditAno']);
 Route::post('edit/ano', [AnoController::class, 'editAno']);
 Route::delete('delete/ano/{id}', [AnoController::class, 'deleteANO']);
-Route::get('detail/ano/{id}', [AnoController::class, 'detailAno']);
+Route::get('detail/ano/{id}', [AnoController::class, 'detaiPlivralAno']);
+Route::get('ano/programme', [AnoController::class, 'anoProgramme']);
 
 // Routes Activités / jalons
 Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);
@@ -72,10 +87,12 @@ Route::post('insert/livrable', [livrableController::class, 'insertLivrable']);
 Route::get('livrable/{id}', [livrableController::class, 'livrable']);
 
 // Routes pour les contracts
-Route::get('contracts', [ContractController::class, 'contracts']);
+Route::get('contracts/{id}', [ContractController::class, 'contracts']);
 Route::post('insert/contract', [ContractController::class, 'insertContract']);
+Route::get('contracts', [ContractController::class, 'getContracts']);
 
 // Routes pour les factures 
 
 Route::get('factures', [FactureController::class, 'factures']);
-Route::post('insert/facture', [FactureController::class, 'insertFacture']);
+Route::post('insert/factures', [FactureController::class, 'insertFacture']);
+Route::get('select/facture/{id}', [FactureController::class, 'selectFacture']);

@@ -46,20 +46,24 @@ class livrableController extends Controller
         if ($request->hasFile('documents')) {
             //return response()->json($documents);
             foreach($request->file('documents') as $index => $file){
-                //dd($request->file('documents'));
-                $filePath = $file->store('documents', 'local');
 
-                $titre = $titres[$index];
+                $destinationPath = 'assets/documents';  // Chemin dans le répertoire public
 
-                // Récupérer le chemin d'accès au fichier
-                $fileUrl = Storage::url($filePath);
+                // Sauvegarder le fichier dans le répertoire public/assets/documents avec le nom original
+                $filePath = $file->move(public_path($destinationPath), $file->getClientOriginalName());
     
-                // Enregistrer les informations du document en base de données
+                // Récupérer le nom du fichier
+                $filename = $file->getClientOriginalName();
+                
+                // Utiliser la fonction asset() pour générer l'URL publique du fichier
+                $fileUrl = asset('assets/documents/' . $filename);
+    
+                // Enregistrer les informations du document dans la base de données
                 $document = new documentsLivrable();
-                $document->titre = $titre;
-                $document->file_name = $file->getClientOriginalName();
-                $document->file_path = $filePath;
-                $document->file_url = $fileUrl;
+                $document->titre = $titres[$index];
+                $document->file_name = $filename;
+                $document->file_path = $destinationPath . '/' . $filename;
+                $document->file_url = $fileUrl;  // URL générée avec asset()
                 $document->livrable_id = $livrable->id;
                 $document->save();
             }

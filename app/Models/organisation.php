@@ -21,4 +21,8 @@ class organisation extends Model
     public function objectifs(){
         return $this->belongsToMany(Objectif::class)->withPivot('ancrage');
     }
+
+    public function programmes(){
+        return $this->belongsToMany(programme::class)->withPivot('ancrage');
+    }
 }

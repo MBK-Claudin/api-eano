@@ -39,4 +39,8 @@ class activiteBudgetAnnuel extends Model
         return $this->hasMany(activite::class);
     }
 
+    public function anos() : HasMany {
+        return $this->hasMany(ano::class);
+    }
+
 }
