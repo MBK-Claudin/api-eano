@@ -54,6 +54,7 @@ Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme']
 Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme']);
 Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme']);
 Route::get('programme/planing/{id}', [ProgrammeController::class, 'gantt']);
+Route::get('programme/planing/data/{id}', [ProgrammeController::class, 'planingGantt']);
 Route::get('programme/site/{id}', [ProgrammeController::class, 'sites']);
 Route::post('programme/insert/site', [ProgrammeController::class, 'insertSites']);
 Route::delete('delete/programme/{id}', [ProgrammeController::class, 'deleteProgramme']);
@@ -76,7 +77,7 @@ Route::get('select/edit/ano/{id}', [AnoController::class, 'selectEditAno']);
 Route::post('edit/ano', [AnoController::class, 'editAno']);
 Route::delete('delete/ano/{id}', [AnoController::class, 'deleteANO']);
 Route::get('detail/ano/{id}', [AnoController::class, 'detailAno']);
-Route::get('ano/programme', [AnoController::class, 'anoProgramme']);
+Route::get('ano/programme/{id}', [AnoController::class, 'anoProgramme']);
 
 // Routes Activités / jalons
 Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);

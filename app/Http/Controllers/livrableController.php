@@ -79,22 +79,15 @@ class livrableController extends Controller
 
     public function livrable($id){
 
-        $livrables = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.livrables')
+        $livrables = Programme::with(
+            'budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.livrables.users', 'budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.phase')
         ->find($id)
         ->budgetannuels
         ->flatMap(function($budgetannuels) {
             return $budgetannuels->composants->flatMap(function($composants) {
                 return $composants->souscomposants->flatMap(function($souscomposants) {
                     return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
-                        return $activitesbudgetannuel->activites->flatMap(function($activites){
-                            return $activites->livrables->flatMap(function($livrables){
-                                return [
-                                    'livrable' => $livrables,
-                                    'activite' => $livrables->activite,
-                                    'sites' => $livrables->activite->sites
-                                ];
-                            });
-                        });
+                        return $activitesbudgetannuel->activites;
                     });
                 });
             });

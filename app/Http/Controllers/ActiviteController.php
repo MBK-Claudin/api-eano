@@ -40,7 +40,7 @@ class ActiviteController extends Controller
         $activites->save();
 
         
-        $site = User::where('id', $sites)->first();
+        $site = site::where('id', $sites)->first();
         $activites->sites()->attach($site->id);
 
         if($emails){

@@ -241,7 +241,7 @@ class AnoController extends Controller
     }
 
     public function anoProgramme($id){
-        $ano = programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.anos')
+        $ano = programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.anos.evenements.users')
         ->find($id)
         ->budgetannuels
         ->flatMap(function($budgetannuels) {
