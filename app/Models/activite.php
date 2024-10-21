@@ -15,7 +15,8 @@ class activite extends Model
     protected $fillable = [
         'libelle',
         'date_debut',
-        'date_fin'
+        'date_fin',
+        'budget'
     ];
 
     public function users() : BelongsToMany {

@@ -21,6 +21,7 @@ class ActiviteController extends Controller
             'date_fin' => 'required',
             'responsables' => 'required',
             'emails' => 'required',
+            'budget' => 'required'
         ]);
         //return response()->json($request->libelle);
 
@@ -31,6 +32,7 @@ class ActiviteController extends Controller
             'libelle' => $request->libelle,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
+            'budget' => $request->budget,
         ]);
 
         $activites->activite_budget_annuel_id = $request->activite_id;

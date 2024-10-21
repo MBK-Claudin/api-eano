@@ -64,7 +64,7 @@ class budgetAnnuelController extends Controller
     }
 
     public function activite ($id) {
-        $activites = activiteBudgetAnnuel::with('activites.users', 'users', 'anos.evenements.users')->find($id);
+        $activites = activiteBudgetAnnuel::with('activites.users', 'users', 'anos.evenements.users', 'activites.phase')->find($id);
         return response()->json($activites);
     }
 
@@ -76,6 +76,8 @@ class budgetAnnuelController extends Controller
         ]);
     }
 
-
-
+    public function allBudget () {
+        $budgets = budgetAnnuel::with('programme')->get();
+        return response()->json($budgets);
+    }
 }

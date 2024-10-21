@@ -42,17 +42,17 @@ Route::delete('delete/site/{id}', [siteController::class, 'deleteSite']);
 Route::post('edit/site', [siteController::class, 'editSite']);
 
 // Routes Pour les Objectifs stratégiques
-Route::post('insert/objectif/', [ObjectifController::class, 'insertObjectif'])->name('objectif.insert');
-Route::get('objectifs', [ObjectifController::class, 'objectifs'])->name('objectif');
-Route::get('select/objectif/{id}', [ObjectifController::class, 'selectObjectif'])->name('objectif.select');
-Route::put('edit/objectif/', [ObjectifController::class, 'editObjectif'])->name('objectif.edit');
-Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif'])->name('objectif.delete');
+Route::post('insert/objectif/', [ObjectifController::class, 'insertObjectif']);
+Route::get('objectifs', [ObjectifController::class, 'objectifs']);
+Route::get('select/objectif/{id}', [ObjectifController::class, 'selectObjectif']);
+Route::put('edit/objectif/', [ObjectifController::class, 'editObjectif']);
+Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
 // Routes Pour les programmes
-Route::get('programmes', [ProgrammeController::class, 'programmes'])->name('programmes');
-Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme'])->name('programme.insert');
-Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme'])->name('programme.select');
-Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme'])->name('programme.edit');
+Route::get('programmes', [ProgrammeController::class, 'programmes']);
+Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme']);
+Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme']);
+Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme']);
 Route::get('programme/planing/{id}', [ProgrammeController::class, 'gantt']);
 Route::get('programme/site/{id}', [ProgrammeController::class, 'sites']);
 Route::post('programme/insert/site', [ProgrammeController::class, 'insertSites']);
@@ -64,7 +64,9 @@ Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailB
 Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
 Route::get('budgetannuel/activites', [budgetAnnuelController::class, 'activites']);
 Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activite']);
+//Route::get('');
 Route::delete('budgetannuel/delete/activite/{id}', [budgetAnnuelController::class, 'deleteActivite']);
+Route::get('all/budgetannuels/', [budgetAnnuelController::class, 'allBudget']);
 
 
 // Routes pour les Anos
@@ -73,7 +75,7 @@ Route::get('ano', [AnoController::class, 'ano']);
 Route::get('select/edit/ano/{id}', [AnoController::class, 'selectEditAno']);
 Route::post('edit/ano', [AnoController::class, 'editAno']);
 Route::delete('delete/ano/{id}', [AnoController::class, 'deleteANO']);
-Route::get('detail/ano/{id}', [AnoController::class, 'detaiPlivralAno']);
+Route::get('detail/ano/{id}', [AnoController::class, 'detailAno']);
 Route::get('ano/programme', [AnoController::class, 'anoProgramme']);
 
 // Routes Activités / jalons

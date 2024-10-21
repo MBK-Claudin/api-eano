@@ -51,27 +51,27 @@ class User extends Authenticatable
         ];
     }
 
-    public function organisations(){
+    public function organisations() : BelongsToMany {
         return $this->belongsToMany(organisation::class)->withPivot('poste');
     }
 
-    public function objectifs(){
+    public function objectifs(): BelongsToMany {
         return $this->belongsToMany(objectif::class)->withPivot('role');
     }
 
-    public function programmes () {
+    public function programmes ():BelongsToMany {
         return $this->belongsToMany(programme::class)->withPivot('poste');
     }
 
-    public function activiteBudgetAnnuels () {
+    public function activiteBudgetAnnuels ():BelongsToMany {
         return $this->belongsToMany(activiteBudgetAnnuel::class)->withPivot('role');
     }
 
-    public function evenements () {
+    public function evenements (): BelongsToMany {
         return $this->belongsToMany(evenement::class)->withPivot('role');
     }
 
-    public function anos () {
+    public function anos () : BelongsToMany {
         return $this->belongsToMany(ano::class)->withPivot('action');
     }
 
@@ -86,5 +86,4 @@ class User extends Authenticatable
     public function missions () : BelongsToMany {
         return $this->belongsToMany(mission::class)->withPivot('role');
     }
-
 }

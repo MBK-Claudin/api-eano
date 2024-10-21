@@ -116,8 +116,7 @@ class AnoController extends Controller
     }
 
     public function selectEditAno ($id){
-        //dd($id);
-        $ano = ano::with('documents', 'evenements', 'users')->find($id);
+        $ano = ano::with('documents', 'evenements.users', 'users')->find($id);
         return response()->json($ano);
     }
 
