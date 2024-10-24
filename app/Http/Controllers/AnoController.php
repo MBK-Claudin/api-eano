@@ -236,7 +236,7 @@ class AnoController extends Controller
     }
 
     public function detailAno($id) {
-        $ano = ano::with('documents', 'evenements.users', 'users')->find($id);
+        $ano = ano::with('documents', 'evenements.users', 'users', 'activitebudgetannuel')->find($id);
         return response()->json($ano);
     }
 
@@ -254,6 +254,33 @@ class AnoController extends Controller
             });
         });
 
+        return response()->json($ano);
+    }
+
+    public function etudeAno($id, Request $request){
+        
+        $request->validate([
+            'budget_cntippee' => 'required',
+            'situation_actuelle'=> 'required',
+            'situation_avenir' => 'required',
+            'commentaire' => 'required',
+        ]);
+
+        $ano = ano::find($id);
+
+        $ano->budget_cntippee = $request->budget_cntippee;
+        $ano->situation_sctuelle = $request->situation_actuelle;
+        $ano->situation_venir = $request->situation_avenir;
+        $ano->commentaire = $request->commentaire;
+        $ano->statut = 'En traitement';
+        $ano->save();
+        
+        return response()->json($ano);
+    }
+
+    public function valider($id){
+        $ano = ano::find($id);
+        $ano->statut = 'Validé';
         return response()->json($ano);
     }
 }
