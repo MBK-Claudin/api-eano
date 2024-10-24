@@ -65,10 +65,10 @@ Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailB
 Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
 Route::get('budgetannuel/activites', [budgetAnnuelController::class, 'activites']);
 Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activite']);
+
 //Route::get('');
 Route::delete('budgetannuel/delete/activite/{id}', [budgetAnnuelController::class, 'deleteActivite']);
 Route::get('all/budgetannuels/', [budgetAnnuelController::class, 'allBudget']);
-
 
 // Routes pour les Anos
 Route::post('insert/ano/', [AnoController::class, 'insertAno']);
@@ -78,6 +78,8 @@ Route::post('edit/ano', [AnoController::class, 'editAno']);
 Route::delete('delete/ano/{id}', [AnoController::class, 'deleteANO']);
 Route::get('detail/ano/{id}', [AnoController::class, 'detailAno']);
 Route::get('ano/programme/{id}', [AnoController::class, 'anoProgramme']);
+Route::post('ano/etude/{id}', [AnoController::class, 'etudeAno']);
+Route::get('ano/valider/{id}', [AnoController::class, 'valider']);
 
 // Routes Activités / jalons
 Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);
@@ -95,7 +97,7 @@ Route::post('insert/contract', [ContractController::class, 'insertContract']);
 Route::get('contracts', [ContractController::class, 'getContracts']);
 
 // Routes pour les factures 
-
 Route::get('factures', [FactureController::class, 'factures']);
 Route::post('insert/factures', [FactureController::class, 'insertFacture']);
 Route::get('select/facture/{id}', [FactureController::class, 'selectFacture']);
+
