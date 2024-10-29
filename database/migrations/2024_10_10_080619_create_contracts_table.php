@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\programme;
+use App\Models\activiteBudgetAnnuel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('montant', 20, 2);
             $table->decimal('montant_decaisse', 20, 2)->nullable();
             $table->decimal('montant_restant', 20, 2)->nullable();
-            $table->foreignIdFor(programme::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(activiteBudgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

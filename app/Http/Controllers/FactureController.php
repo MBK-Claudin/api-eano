@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ano;
+use App\Models\contract;
 use App\Models\documentFacture;
 use App\Models\facture;
+use App\Models\service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,9 +30,10 @@ class FactureController extends Controller
             'date_reception' => 'required',
             'montant' => 'required',
             'couverture' => 'required',
+            'user_id' => 'required',
         ]);
 
-        //dd($request->hasFile('documents'));
+        $service = service::find(1);
 
         $facture = facture::create([
             'reference_facture' => $request->ref_facture,
@@ -38,7 +42,11 @@ class FactureController extends Controller
             'date_reception' => $request->date_reception,
             'couverture' => $request->couverture,
         ]);
-        //dd($facture);
+
+        $facture->services()->attach($service->id, [
+            'etape' => 'Reçu',
+            'user_id' => $request->user_id,
+        ]);
 
         if($request->input('ano')){
             $facture->ano_id = $request->ano;
@@ -88,7 +96,43 @@ class FactureController extends Controller
     }
 
     public function selectFacture($id){
-        $facture = facture::with('documents', 'ano', 'contract')->find($id);
+        $facture = facture::with('documents', 'ano.evenements', 'contract')->find($id);
         return response()->json($facture);
     }
+
+    public function anos () {
+        $ano = ano::all();
+        return response()->json($ano);
+    }
+
+    public function contracts () {
+        $contract = contract::all();
+        return response()->json($contract);
+    }
+
+    public function etatActuel ($id) {
+        // $facture = facture::with('services')->find($id);
+        // return response()->json($facture);
+
+
+        // Recherche de la facture avec son suivi le plus récent
+        $facture = Facture::with(['services' => function ($query) {
+            $query->orderBy('created_at', 'desc')->first();
+        }])->find($id);
+
+        // Vérifie s'il existe un suivi associé
+        if ($facture && $facture->services->isNotEmpty()) {
+            $suiviActuel = $facture->services->first(); // Récupère la dernière étape
+            return response()->json([
+                'service' => $suiviActuel,
+                'etape' => $suiviActuel->pivot->etape,
+                'user_id' => $suiviActuel->pivot->user_id,
+                'created_at' => $suiviActuel->pivot->created_at,
+            ]);
+        }
+
+        return response()->json(['message' => 'Aucun suivi trouvé pour cette facture.'], 400);
+    }
+
+
 }

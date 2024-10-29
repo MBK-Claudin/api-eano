@@ -20,7 +20,7 @@ class ContractController extends Controller
             'libelle' => 'required',
             'description' => 'required',
             'montant' => 'required',
-            'programme_id' => 'required',
+            'activite_id' => 'required',
         ]);
 
         $contract = contract::create([
@@ -30,7 +30,7 @@ class ContractController extends Controller
             'montant' => $request->montant,
         ]);
 
-        $contract->programme_id = $request->programme_id;
+        $contract->activite_budget_annuel_id = $request->activite_id;
         $contract->save();
 
         $titres = $request->input('titres');
@@ -70,11 +70,29 @@ class ContractController extends Controller
         $contracts = programme::with('contracts')->find($id);
         return response()->json($contracts);
     }
+    
     public function getContracts (){
         $contracts = contract::all();
         return response()->json([
             'contracts' => $contracts
         ]);
+    }
+
+    public function contractProgramme ($id) {
+        $contracts = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.contracts')
+        ->find($id)
+        ->budgetannuels
+        ->flatMap(function($budgetannuels) {
+            return $budgetannuels->composants->flatMap(function($composants) {
+                return $composants->souscomposants->flatMap(function($souscomposants) {
+                    return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
+                        return $activitesbudgetannuel->contracts;
+                    });
+                });
+            });
+        });
+
+        return response()->json($contracts);
     }
 
 }

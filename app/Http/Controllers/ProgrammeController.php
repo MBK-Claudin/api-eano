@@ -259,4 +259,21 @@ class ProgrammeController extends Controller
         return response()->json($programme);
     }
 
+    public function trasnformation ($id) {
+        $ano = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.sites')
+        ->find($id)
+        ->budgetannuels
+        ->flatMap(function($budgetannuels) {
+            return $budgetannuels->composants->flatMap(function($composants) {
+                return $composants->souscomposants->flatMap(function($souscomposants) {
+                    return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
+                        return $activitesbudgetannuel->activites;
+                    });
+                });
+            });
+        });
+
+        return response()->json($ano);
+    }
+
 }

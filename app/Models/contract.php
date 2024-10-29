@@ -20,11 +20,11 @@ class contract extends Model
         'montant_restant',
     ];
 
-    public function programme () : BelongsTo {
-        return $this->belongsTo(programme::class);
-    }
-
     public function factures () : HasMany {
         return $this->hasMany(facture::class);
+    }
+
+    public function activitebudgetannuel () : BelongsTo {
+        return $this->belongsTo(activiteBudgetAnnuel::class);
     }
 }

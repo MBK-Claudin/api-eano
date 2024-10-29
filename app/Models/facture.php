@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class facture extends Model
@@ -33,5 +34,13 @@ class facture extends Model
 
     public function paiements () : HasMany {
         return $this->hasMany(paiement::class);
+    }
+
+    public function services() : BelongsToMany {
+        return $this->belongsToMany(service::class)->withPivot('etape', 'user_id')->withTimestamps();
+    }
+
+    public function users () : BelongsToMany {
+        return $this->belongsToMany(User::class)->withPivot('etape', 'service_id')->withTimestamps();
     }
 }

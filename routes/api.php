@@ -54,11 +54,13 @@ Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme']
 Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme']);
 Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme']);
 Route::get('programme/facture/{id}', [ProgrammeController::class, 'factures']);
+
 //Route::get('programme/planing/{id}', [ProgrammeController::class, 'gantt']);
 Route::get('programme/planing/data/{id}', [ProgrammeController::class, 'planingGantt']);
 Route::get('programme/site/{id}', [ProgrammeController::class, 'sites']);
 Route::post('programme/insert/site', [ProgrammeController::class, 'insertSites']);
 Route::delete('delete/programme/{id}', [ProgrammeController::class, 'deleteProgramme']);
+Route::get('programme/planTrasnformation/{id}', [ProgrammeController::class, 'trasnformation']);
 
 // Routes Pour les budgets annuels (PTBA)
 Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel']);
@@ -94,6 +96,7 @@ Route::get('livrable/{id}', [livrableController::class, 'livrable']);
 
 // Routes pour les contracts
 Route::get('contracts/{id}', [ContractController::class, 'contracts']);
+Route::get('contracts/programme/{id}', [ContractController::class, 'contractProgramme']);
 Route::post('insert/contract', [ContractController::class, 'insertContract']);
 Route::get('contracts', [ContractController::class, 'getContracts']);
 
@@ -101,4 +104,7 @@ Route::get('contracts', [ContractController::class, 'getContracts']);
 Route::get('factures', [FactureController::class, 'factures']);
 Route::post('insert/factures', [FactureController::class, 'insertFacture']);
 Route::get('select/facture/{id}', [FactureController::class, 'selectFacture']);
+Route::get('facture/ano', [FactureController::class, 'anos']);
+Route::get('facture/contract', [FactureController::class, 'contracts']);
+Route::get('facture/etatActuel/{id}', [FactureController::class, 'etatActuel']);
 
