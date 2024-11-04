@@ -16,10 +16,6 @@ class evenement extends Model
         'date_fin'
     ];
 
-    public function users () {
-        return $this->belongsToMany(User::class);
-    }
-
     public function ano() {
         return $this->belongsTo(ano::class);
     }

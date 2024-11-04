@@ -21,6 +21,7 @@ class ProgrammeController extends Controller
 
         $programme = Programme::create([
             'libelle' => $request->libelle,
+            'objectif_specifique' => $request->objectif_specifique,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
         ]);
@@ -58,7 +59,7 @@ class ProgrammeController extends Controller
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
     
-                $user = User::where('name', $responsable)->first();
+                $user = User::where('email', $email)->first();
     
                 if($user){
                     $user->programmes()->attach($programme->id, ['role' => 'responsable']);
@@ -84,12 +85,13 @@ class ProgrammeController extends Controller
     }
 
     public function editProgramme(Request $request){
-        dd($request->all());
+        //dd($request->all());
 
         $objectif = objectif::where('id', $request->objectif_id)->first();
 
         $programme = Programme::find($request->id);
         $programme->objectif_id = $objectif->id;
+        $programme->objectif_specifique = $request->objectif_specifique;
         $programme->libelle = $request->libelle;
         $programme->date_debut = $request->date_debut;
         $programme->date_fin = $request->date_fin;

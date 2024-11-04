@@ -37,7 +37,7 @@ class budgetAnnuelController extends Controller
         $ptba->programme_id = $request->programme_id;
         $ptba->save();
 
-        Excel::import(new budgetAnnuelImport($ptba->id), $request->file('excel'));
+        Excel::import(new budgetAnnuelImport($ptba->id, $request->programme_id), $request->file('excel'));
 
         return response()->json([
             'message' => 'Budget Annuel inserted successfully',

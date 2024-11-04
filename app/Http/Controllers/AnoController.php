@@ -21,6 +21,7 @@ class AnoController extends Controller
             'titres' => 'required',
             'date_debut' => 'required',
             'date_fin' => 'required',
+            'libelle' => 'required',
             'budget' => 'required',
             'email' => 'required',
             'responsable' => 'required',
@@ -30,6 +31,7 @@ class AnoController extends Controller
         
         //$activite = activiteBudgetAnnuel::find($request->activite_id)->first();
         $ano = ano::create([
+            'libelle'=> $request->libelle,
             'budget' => $request->budget,
             'statut' => 'En Attente'
         ]);
@@ -39,7 +41,7 @@ class AnoController extends Controller
             $ano->save();
         }
 
-        $ano->users()->attach($request->user_id);
+        $ano->users()->attach($request->user_id, ['action' => 'creation']);
 
         $evenements = $request->input('evenement');
         $date_debut = $request->input('date_debut');
@@ -54,9 +56,6 @@ class AnoController extends Controller
                 $event = $evenements[$i];
                 $date_d = $date_debut[$i];
                 $date_f = $date_fin[$i];
-                $email = $emails[$i];
-
-                $user = User::where('email', $email)->first();
 
                 $newEvent = evenement::create([
                     'libelle' => $event,
@@ -67,8 +66,13 @@ class AnoController extends Controller
                 $newEvent->ano_id = $ano->id;
                 $newEvent->activite_budget_annuel_id = $request->activite_id;
                 $newEvent->save();
+            }
+        }
 
-                $user->evenements()->attach($newEvent->id, ['role' => 'Responsable']);
+        if($emails){
+            for($i = 0; $i < count($emails); $i++){
+                $user = User::where('email', $emails[$i])->first();
+                $user->anos()->attach($ano->id, ['role'=> 'Responsable']);
             }
         }
 
@@ -241,20 +245,29 @@ class AnoController extends Controller
     }
 
     public function anoProgramme($id){
-        $ano = programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.anos.evenements.users')
+        $ano = programme::with(
+            'budgetannuels.composants.souscomposants.activitesbudgetannuel.anos.evenements',
+        'budgetannuels.composants.souscomposants.activitesbudgetannuel.anos.users')
         ->find($id)
         ->budgetannuels
         ->flatMap(function($budgetannuels) {
             return $budgetannuels->composants->flatMap(function($composants) {
                 return $composants->souscomposants->flatMap(function($souscomposants) {
-                    return $souscomposants->activitesbudgetannuel->flatMap(function($activitesbudgetannuel){
-                        return $activitesbudgetannuel->anos;
-                    });
+                    return $souscomposants->activitesbudgetannuel;
                 });
             });
         });
 
         return response()->json($ano);
+    }
+    public function anoComposantesActivites($id) {
+        $activites = programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel')
+        ->find($id)
+        ->budgetannuels->flatMap(function($budgetannuels){
+            return $budgetannuels->composants;
+        });
+
+        return response()->json($activites);
     }
 
     public function etudeAno($id, Request $request){
@@ -283,4 +296,10 @@ class AnoController extends Controller
         $ano->statut = 'Validé';
         return response()->json($ano);
     }
+
+    public function anoActivite ($id) {
+        $activite = activiteBudgetAnnuel::with('anos.evenements.users')->find($id);
+        return response()->json($activite->anos);
+    }
+
 }

@@ -18,8 +18,13 @@ return new class extends Migration
         Schema::create('programmes', function (Blueprint $table) {
             $table->id();
             $table->string('libelle');
+            $table->string('objectif_specifique');
             $table->date('date_debut');
             $table->date('date_fin');
+            $table->decimal('Budget_planifier_fcfa', 20, 2)->nullable()->default(0);
+            $table->decimal('Budget_planifier_us', 20, 2)->nullable()->default(0);
+            $table->decimal('Budget_executer_fcfa', 20, 2)->nullable()->default(0);
+            $table->decimal('Budget_executer_us', 20, 2)->nullable()->default(0);
             $table->string('statut')->nullable();
             $table->string('echeance')->nullable();
             $table->string('taux_execution_physique')->nullable();

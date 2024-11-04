@@ -13,6 +13,7 @@ class ano extends Model
     use HasFactory;
 
     protected $fillable = [
+        'libelle',
         'budget',
         'budget_cntippee',
         'statut',
@@ -22,7 +23,7 @@ class ano extends Model
     ];
 
     public function users(){
-        return $this->belongsToMany(User::class)->withPivot('action');
+        return $this->belongsToMany(User::class)->withPivot('action', 'role');
     }
 
     public function evenements () {

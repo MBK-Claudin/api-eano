@@ -22,13 +22,6 @@ return new class extends Migration
             $table->foreignIdFor(activiteBudgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
-
-        Schema::create('evenement_user', function (Blueprint $table) {
-            $table->foreignIdFor(evenement::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->primary(['evenement_id', 'user_id']);
-            $table->string('role');
-        });
     }
 
     /**

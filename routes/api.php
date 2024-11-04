@@ -22,6 +22,9 @@ Route::get('/user', function (Request $request) {
 Route::get('auth/callback', [authAzureController::class, 'callback']);
 Route::get('logout', [authAzureController::class, 'logout']);
 Route::get('auth/user/{id}', [authAzureController::class, 'authUser']);
+Route::get('user/activitebudgetannuel/{id}', [UserController::class, 'userActivitebudgetannuel']);
+Route::get('user/affectations/{id}', [UserController::class, 'affectations']);
+Route::get('user/taches/{id}', [UserController::class, 'taches']);
 
 // Routes Users
 Route::get('users', [UserController::class, 'users'])->name('users');
@@ -48,6 +51,7 @@ Route::get('select/objectif/{id}', [ObjectifController::class, 'selectObjectif']
 Route::put('edit/objectif/', [ObjectifController::class, 'editObjectif']);
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
+Route::get('objectif/programme/{id}', [ObjectifController::class, 'objectifProgramme']);
 // Routes Pour les programmes
 Route::get('programmes', [ProgrammeController::class, 'programmes']);
 Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme']);
@@ -83,12 +87,15 @@ Route::get('detail/ano/{id}', [AnoController::class, 'detailAno']);
 Route::get('ano/programme/{id}', [AnoController::class, 'anoProgramme']);
 Route::post('ano/etude/{id}', [AnoController::class, 'etudeAno']);
 Route::get('ano/valider/{id}', [AnoController::class, 'valider']);
+Route::get('ano/activitebudgetannuel/{id}', [AnoController::class, 'anoActivite']);
+Route::get('ano/programme/composantes/activite/{id}', [AnoController::class,'anoComposantesActivites']);
 
 // Routes Activités / jalons
 Route::post('insert/activite', [ActiviteController::class, 'insertActivite']);
 Route::get('activite/phases', [ActiviteController::class, 'getPhase']);
 Route::get('activite/sites', [ActiviteController::class, 'getSites']);
 Route::get('activite', [ActiviteController::class, 'getJalon']);
+Route::get('activite/activitebudgetannuel/{id}', [ActiviteController::class, 'jalonActivite']);
 
 // Routes livrable
 Route::post('insert/livrable', [livrableController::class, 'insertLivrable']);
@@ -107,4 +114,5 @@ Route::get('select/facture/{id}', [FactureController::class, 'selectFacture']);
 Route::get('facture/ano', [FactureController::class, 'anos']);
 Route::get('facture/contract', [FactureController::class, 'contracts']);
 Route::get('facture/etatActuel/{id}', [FactureController::class, 'etatActuel']);
+Route::get('facture/traitement/{idFacture}/{idService}/{user_id}', [FactureController::class, 'traitementFacture']);
 

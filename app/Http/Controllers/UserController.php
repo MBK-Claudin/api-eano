@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\activiteBudgetAnnuel;
+use App\Models\objectif;
 use App\Models\organisation;
 use App\Models\programme;
 use App\Models\User;
@@ -73,5 +75,34 @@ class UserController extends Controller
 
         $org = organisation::where('libelle', $request->org)->first();
         $org->users()->attach($request->user_id, ['poste' => $request->poste]);
+    }
+
+    public function userActivitebudgetannuel ($id) {
+        $user = activiteBudgetAnnuel::with('users')->find($id);
+        return response()->json($user->users);
+    }
+
+    public function affectations ($id) {
+        $obejctif = User::with('objectifs', )->find($id);
+        $programme = User::with('programmes')->find($id);
+        $activitebudgetannuel = User::with('activiteBudgetAnnuels')->find($id);
+
+        return response()->json([
+            'objectifs' => $obejctif->objectifs,
+            'programme'=> $programme->programmes,
+            'activite'=> $activitebudgetannuel->activiteBudgetAnnuels,
+        ]);
+    }
+
+    public function taches ($id) {
+        $jalon = User::with('activites')->find($id);
+        $livrable = User::with('livrables')->find($id);
+        $ano = User::with('anos')->find($id);
+
+        return response()->json([
+            'ano' => $ano->anos,
+            'jalon'=> $jalon->activites,
+            'livrable'=> $livrable->livrables,
+        ]);
     }
 }

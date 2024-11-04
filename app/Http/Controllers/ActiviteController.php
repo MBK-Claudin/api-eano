@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\activite;
+use App\Models\activiteBudgetAnnuel;
 use App\Models\phase;
 use App\Models\site;
 use App\Models\User;
@@ -68,6 +69,12 @@ class ActiviteController extends Controller
     public function getJalon (){
         $a = activite::all();
         return response()->json($a);
+    }
+
+
+    public function jalonActivite ($id) {
+        $activite = activiteBudgetAnnuel::with('activites')->find($id);
+        return response()->json($activite->activites);
     }
 
 }

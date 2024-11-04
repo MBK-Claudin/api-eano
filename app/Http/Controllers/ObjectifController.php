@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class ObjectifController extends Controller
 {
+
+    public function objectifProgramme($id){
+        $programme = objectif::with("programmes")->findOrFail($id);
+        return response()->json($programme->programmes);
+    }
+    
     public function objectifs (){
         $objectifs = objectif::with('organisations', 'users')->get();
         return response()->json($objectifs);
@@ -72,7 +78,7 @@ class ObjectifController extends Controller
     }
 
     public function selectObjectif($id) {
-        $objectif = objectif::with('organisations', 'users', 'programmes')->find($id);
+        $objectif = objectif::with('organisations', 'users.organisations', 'programmes')->find($id);
         return response()->json($objectif);
     }
 

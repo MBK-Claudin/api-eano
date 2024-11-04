@@ -60,19 +60,16 @@ class User extends Authenticatable
     }
 
     public function programmes ():BelongsToMany {
-        return $this->belongsToMany(programme::class)->withPivot('poste');
+        return $this->belongsToMany(programme::class)->withPivot('role');
     }
 
     public function activiteBudgetAnnuels ():BelongsToMany {
         return $this->belongsToMany(activiteBudgetAnnuel::class)->withPivot('role');
     }
-
-    public function evenements (): BelongsToMany {
-        return $this->belongsToMany(evenement::class)->withPivot('role');
-    }
+    
 
     public function anos () : BelongsToMany {
-        return $this->belongsToMany(ano::class)->withPivot('action');
+        return $this->belongsToMany(ano::class)->withPivot('action', 'role');
     }
 
     public function activites() : BelongsToMany {

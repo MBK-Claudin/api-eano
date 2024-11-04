@@ -110,19 +110,16 @@ class FactureController extends Controller
         return response()->json($contract);
     }
 
-    public function etatActuel ($id) {
-        // $facture = facture::with('services')->find($id);
-        // return response()->json($facture);
+    public function etatActuel($id){
+        $facture = Facture::find($id);
 
+        if (!$facture) {
+            return response()->json(['message' => 'Facture introuvable.'], 404);
+        }
 
-        // Recherche de la facture avec son suivi le plus récent
-        $facture = Facture::with(['services' => function ($query) {
-            $query->orderBy('created_at', 'desc')->first();
-        }])->find($id);
+        $suiviActuel = $facture->services()->orderBy('pivot_created_at', 'desc')->first();
 
-        // Vérifie s'il existe un suivi associé
-        if ($facture && $facture->services->isNotEmpty()) {
-            $suiviActuel = $facture->services->first(); // Récupère la dernière étape
+        if ($suiviActuel) {
             return response()->json([
                 'service' => $suiviActuel,
                 'etape' => $suiviActuel->pivot->etape,
@@ -132,6 +129,20 @@ class FactureController extends Controller
         }
 
         return response()->json(['message' => 'Aucun suivi trouvé pour cette facture.'], 400);
+    }
+
+
+    public function traitementFacture ($idFacture, $idService, $user_id){
+        $facture = facture::find($idFacture);
+
+        $facture->services()->attach($idService, [
+            'etape' => 'Traitement',
+            'user_id' => $user_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Facture traitée avec succès',
+        ]);
     }
 
 

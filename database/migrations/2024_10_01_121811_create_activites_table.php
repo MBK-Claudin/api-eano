@@ -2,6 +2,7 @@
 
 use App\Models\activite;
 use App\Models\activiteBudgetAnnuel;
+use App\Models\programme;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->string('statut')->nullable();
             $table->string('echeance')->nullable();
             $table->foreignIdFor(activiteBudgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(programme::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
 
@@ -32,7 +34,6 @@ return new class extends Migration
             $table->primary(['activite_id', 'user_id']);
             $table->string('role');
         });
-
 
     }
 

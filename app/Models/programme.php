@@ -13,8 +13,13 @@ class programme extends Model
 
     protected $fillable = [
         'libelle',
+        'objectif_specifique',
         'date_debut',
         'date_fin',
+        'Budget_planifier_fcfa',
+        'Budget_planifier_us',
+        'Budget_planifier_us',
+        'Budget_planifier_fcfa',
         'statut',
         'echeance',
         'taux_execution_physique',

@@ -3,7 +3,9 @@
 namespace App\Imports;
 
 use App\Models\activiteBudgetAnnuel;
+use App\Models\budgetAnnuel;
 use App\Models\composant;
+use App\Models\programme;
 use App\Models\sousComposant;
 use App\Models\User;
 use Illuminate\Support\Carbon;
@@ -18,16 +20,21 @@ class budgetAnnuelImport implements ToArray, WithHeadingRow
     * @param Collection $collection
     */
 
+    private $ptba_id;
     private $programme_id;
 
-    public function __construct($programme_id)
+    public function __construct($ptba_id, $programme_id)
     {
+        $this->ptba_id = $ptba_id;
         $this->programme_id = $programme_id;
     }
 
     public function array(array $array)
     {
         //dd($this->programme_id);
+        $programme = programme::find($this->programme_id);
+        $budget_annuel = budgetAnnuel::find($this->ptba_id);
+
         foreach ($array as $data) {
             $date_debut = $this->transformExcelDate($data['date_de_debut']);
             $date_fin = $this->transformExcelDate($data['date_de_fin']);
@@ -35,7 +42,7 @@ class budgetAnnuelImport implements ToArray, WithHeadingRow
             // Vérifier s'il y a une composante et pas d'activité
             if (!empty($data['composante_sous_composante']) && empty($data['activites'])) {
                 $composant = composant::firstOrCreate(['libelle' => $data['composante_sous_composante']]);
-                $composant->budget_annuel_id = $this->programme_id;
+                $composant->budget_annuel_id = $this->ptba_id;
                 $composant->save();
             }
 
@@ -63,6 +70,14 @@ class budgetAnnuelImport implements ToArray, WithHeadingRow
 
                 $activite->sous_composant_id = $souscomposant->id;
                 $activite->save();
+
+                $programme->Budget_planifier_us += $activite->budget_us;
+                $programme->Budget_planifier_fcfa += $activite->budget_fcfa;
+                $programme->save();
+
+                $budget_annuel->Budget_planifier_us += $activite->budget_us;
+                $budget_annuel->Budget_planifier_fcfa += $activite->budget_fcfa;
+                $programme->save();
             }
 
             if (!empty($data['responsable'])) {

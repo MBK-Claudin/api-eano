@@ -16,10 +16,11 @@ return new class extends Migration
     {
         Schema::create('anos', function (Blueprint $table) {
             $table->id();
-            $table->decimal('budget', 20, 2);
-            $table->decimal('budget_cntippee', 20, 2)->nullable();
+            $table->string('libelle');
+            $table->decimal('budget', 20, 2)->default(0);
+            $table->decimal('budget_cntippee', 20, 2)->nullable()->default(0);
             $table->string('statut')->nullable();
-            $table->text('situation_sctuelle')->nullable();
+            $table->text('situation_actuelle')->nullable();
             $table->text('situation_venir')->nullable();
             $table->text('commentaire')->nullable();
             $table->foreignIdFor(activiteBudgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();
@@ -30,7 +31,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(ano::class)->constrained()->cascadeOnDelete();
             $table->string('action')->nullable();
-            $table->primary(['ano_id', 'user_id']);
+            $table->string('role')->nullable();
         });
 
         Schema::table('evenements', function (Blueprint $table) {
