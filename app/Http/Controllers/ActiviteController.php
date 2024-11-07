@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class ActiviteController extends Controller
 {
     public function insertActivite (Request $request) {
-        
+
         $request->validate([
             'activite_id' => 'required',
             'site' => 'required',
@@ -40,7 +40,7 @@ class ActiviteController extends Controller
         $activites->phase_id = $request->phase;
         $activites->save();
 
-        
+
         $site = site::where('id', $sites)->first();
         $activites->sites()->attach($site->id);
 
