@@ -11,6 +11,7 @@ use App\Http\Controllers\ProgrammeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\FactureController;
+use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\siteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -107,7 +108,7 @@ Route::get('contracts/programme/{id}', [ContractController::class, 'contractProg
 Route::post('insert/contract', [ContractController::class, 'insertContract']);
 Route::get('contracts', [ContractController::class, 'getContracts']);
 
-// Routes pour les factures 
+// Routes pour les factures
 Route::get('factures', [FactureController::class, 'factures']);
 Route::post('insert/factures', [FactureController::class, 'insertFacture']);
 Route::get('select/facture/{id}', [FactureController::class, 'selectFacture']);
@@ -115,4 +116,11 @@ Route::get('facture/ano', [FactureController::class, 'anos']);
 Route::get('facture/contract', [FactureController::class, 'contracts']);
 Route::get('facture/etatActuel/{id}', [FactureController::class, 'etatActuel']);
 Route::get('facture/traitement/{idFacture}/{idService}/{user_id}', [FactureController::class, 'traitementFacture']);
+
+//route pour les impacts
+Route::get('impacts/{id}', [ImpactController::class, 'index']);
+Route::get('impacts/insert', [ImpactController::class, 'store']);
+Route::get('impacts/update/{id}', [ImpactController::class, 'update']);
+Route::get('impact/delete/{id}', [ImpactController::class, 'delete']);
+
 
