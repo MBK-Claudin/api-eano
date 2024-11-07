@@ -174,7 +174,7 @@ class ProgrammeController extends Controller
 
     public function planingGantt($id){
 
-        $livrables = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.phase')
+        $data = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.phase')
         ->find($id)
         ->budgetannuels
         ->flatMap(function($budgetannuels) {
@@ -185,7 +185,7 @@ class ProgrammeController extends Controller
             });
         });
 
-        return response()->json($livrables);
+        return response()->json($data);
     }
 
     public function insertSites(Request $request){
