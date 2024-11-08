@@ -240,7 +240,7 @@ class AnoController extends Controller
     }
 
     public function detailAno($id) {
-        $ano = ano::with('documents', 'evenements.users', 'users', 'activitebudgetannuel')->find($id);
+        $ano = ano::with('documents', 'evenements', 'users', 'activitebudgetannuel')->find($id);
         return response()->json($ano);
     }
 

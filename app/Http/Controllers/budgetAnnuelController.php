@@ -64,7 +64,7 @@ class budgetAnnuelController extends Controller
     }
 
     public function activite ($id) {
-        $activites = activiteBudgetAnnuel::with('activites.users', 'users', 'anos.evenements.users', 'activites.phase')->find($id);
+        $activites = activiteBudgetAnnuel::with( 'users')->find($id);
         return response()->json($activites);
     }
 

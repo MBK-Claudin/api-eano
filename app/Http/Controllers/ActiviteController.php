@@ -20,14 +20,10 @@ class ActiviteController extends Controller
             'libelle' => 'required',
             'date_debut' => 'required',
             'date_fin' => 'required',
-            'responsables' => 'required',
-            'emails' => 'required',
+            'responsable' => 'required',
+            'email' => 'required',
             'budget' => 'required'
         ]);
-        //return response()->json($request->libelle);
-
-        $emails = $request->input('emails');
-        $sites = $request->input('site');
 
         $activites = activite::create([
             'libelle' => $request->libelle,
@@ -39,21 +35,20 @@ class ActiviteController extends Controller
         $activites->activite_budget_annuel_id = $request->activite_id;
         $activites->phase_id = $request->phase;
         $activites->save();
+        
+        $site = site::where('id', $request->site)->first();
 
-
-        $site = site::where('id', $sites)->first();
         $activites->sites()->attach($site->id);
 
-        if($emails){
-            for ($i = 0; $i < count($emails); $i++){
-                $user = User::where('email', $emails[$i])->first();
-                $user->activites()->attach($activites->id, ['role' => 'Responsable']);
-            }
 
-            return response()->json([
-                "message" => "création de l'activité ok !"
-            ], 200);
-        }
+        $user = User::where('email', $request->email)->first();
+        $user->activites()->attach($activites->id, ['role' => 'Responsable']);
+        
+
+        return response()->json([
+            "message" => "création de l'activité ok !"
+        ],);
+        
     }
 
     public function getPhase (){
