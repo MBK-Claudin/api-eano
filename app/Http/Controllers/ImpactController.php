@@ -33,7 +33,6 @@ class ImpactController extends Controller
         return response()->json($impactData);
     }
 
-
     // Stocker un nouvel impact
     public function store(Request $request)
     {

@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\activiteBudgetAnnuel;
+use App\Models\programme;
+use App\Models\site;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,11 +19,11 @@ return new class extends Migration
             $table->string('type_impact');
             $table->string('libelle_impact');
             $table->string('force');
-            $table->foreignId('site_id')->constrained('sites')->onDelete('cascade');
             $table->string('taille');
             $table->string('mitigation');
-            $table->foreignId('programme_id')->constrained('programmes')->onDelete('cascade');
-            $table->foreignId('activite_budget_annuel_id')->constrained('activite_budget_annuels')->onDelete('cascade');
+            $table->foreignIdFor(site::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(programme::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(activiteBudgetAnnuel::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

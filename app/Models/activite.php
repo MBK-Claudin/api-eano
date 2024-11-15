@@ -23,7 +23,7 @@ class activite extends Model
         return $this->belongsToMany(User::class)->withPivot('role');
     }
 
-    public function activiteptba() : BelongsTo {
+    public function activiteBudgetAnnuel() : BelongsTo {
         return $this->belongsTo(activiteBudgetAnnuel::class);
     }
 

@@ -39,7 +39,7 @@ class ano extends Model
     }
 
     public function activitebudgetannuel() : BelongsTo {
-        return $this->belongsTo(activiteBudgetAnnuel::class, 'activite_budget_annuel_id');
+        return $this->belongsTo(activiteBudgetAnnuel::class);
     }
 
 }

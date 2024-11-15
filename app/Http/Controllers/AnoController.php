@@ -115,7 +115,7 @@ class AnoController extends Controller
     }
 
     public function ano () {
-        $ano = ano::with('evenements.users')->get();
+        $ano = ano::with('evenements', 'users', 'activitebudgetannuel')->get();
         return response()->json($ano);
     }
 
