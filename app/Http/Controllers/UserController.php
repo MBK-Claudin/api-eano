@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function users () {
-        $user = User::all();
+        $user = User::with('organisations')->get();
         return response()->json($user);
     }
 
@@ -94,15 +94,17 @@ class UserController extends Controller
         ]);
     }
 
-    public function taches ($id) {
-        $jalon = User::with('activites')->find($id);
-        $livrable = User::with('livrables')->find($id);
-        $ano = User::with('anos')->find($id);
-
+    public function taches($id) {
+        $user = User::with(['activites', 'livrables', 'anos'])->find($id);
+    
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+    
         return response()->json([
-            'ano' => $ano->anos,
-            'jalon'=> $jalon->activites,
-            'livrable'=> $livrable->livrables,
+            'ano' => $user->anos,
+            'jalon' => $user->activites,
+            'livrable' => $user->livrables,
         ]);
     }
 }

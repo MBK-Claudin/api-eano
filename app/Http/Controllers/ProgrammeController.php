@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\objectif;
 use App\Models\organisation;
+use App\Models\phase;
 use App\Models\programme;
 use App\Models\site;
 use App\Models\User;
@@ -172,20 +173,25 @@ class ProgrammeController extends Controller
         return response()->json($livrables);
     }
 
-    public function planingGantt($id){
-
-        $data = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites.phase')
-        ->find($id)
-        ->budgetannuels
-        ->flatMap(function($budgetannuels) {
-            return $budgetannuels->composants->flatMap(function($composants) {
-                return $composants->souscomposants->flatMap(function($souscomposants) {
-                    return $souscomposants->activitesbudgetannuel;
-                });
-            });
-        });
-
-        return response()->json($data);
+    public function planingGantt($id) {
+        // Récupérer le programme avec ses budgets et composants
+        $programme = Programme::with('budgetannuels.composants.souscomposants.activitesbudgetannuel.activites')
+            ->find($id);
+        
+        // Vérifiez si le programme existe
+        if (!$programme) {
+            return response()->json(['error' => 'Programme not found'], 404);
+        }
+    
+        // Récupérer toutes les phases liées aux activités du programme
+        $phases = Phase::with(['activites.activiteBudgetAnnuel'])
+            ->whereHas('activites.activiteBudgetAnnuel', function($query) use ($programme) {
+                $query->whereIn('activite_budget_annuel_id', $programme->budgetannuels->pluck('id'));
+            })
+            ->orWhereDoesntHave('activites.activiteBudgetAnnuel') // Inclure les phases sans activités
+            ->get();
+    
+        return response()->json($phases);
     }
 
     public function insertSites(Request $request){

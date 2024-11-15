@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\budgetAnnuelImport;
 use App\Models\activiteBudgetAnnuel;
 use App\Models\budgetAnnuel;
+use App\Models\phase;
 use App\Models\programme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -80,4 +81,39 @@ class budgetAnnuelController extends Controller
         $budgets = budgetAnnuel::with('programme')->get();
         return response()->json($budgets);
     }
+
+    public function planingData($id) {
+        // Récupérer le programme avec ses budgets et composants
+        $activite = activiteBudgetAnnuel::with('activites')
+            ->find($id);
+        
+        // Vérifiez si le programme existe
+        if (!$activite) {
+            return response()->json(['error' => 'activity not found'], 404);
+        }
+    
+        // Récupérer toutes les phases liées aux activités du programme
+        $phases = phase::with(['activites.activiteBudgetAnnuel'])
+            ->whereHas('activites.activiteBudgetAnnuel', function($query) use ($activite) {
+                $query->whereIn('activite_budget_annuel_id', $activite->activites->pluck('id'));
+            })
+            ->orWhereDoesntHave('activites.activiteBudgetAnnuel') // Inclure les phases sans activités
+            ->get();
+    
+        return response()->json($phases);
+    }
+
+    public function allActviteBudgetAnnuel($id)
+    {
+        $activites = programme::with(['budgetannuels.composants.souscomposants.activitesbudgetannuel'])
+            ->find($id)
+            ->budgetannuels
+            ->flatMap(fn($budget) => $budget->composants)
+            ->flatMap(fn($composant) => $composant->souscomposants)
+            ->flatMap(fn($souscomposant) => $souscomposant->activitesbudgetannuel);
+    
+        return response()->json($activites);
+    }
+    
+    
 }

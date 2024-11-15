@@ -14,6 +14,7 @@ class objectif extends Model
         'secteur',
         'date_debut',
         'date_fin',
+        'description',
         'echeance',
         'taux_execution_physique',
         'taux_execution_final'

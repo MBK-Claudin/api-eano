@@ -16,7 +16,8 @@ return new class extends Migration
     {
         Schema::create('livrables', function (Blueprint $table) {
             $table->id();
-            $table->string('livrable');
+            $table->string('libelle');
+            $table->string('Descriton');
             $table->foreignIdFor(activite::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
