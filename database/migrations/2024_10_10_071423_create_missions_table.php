@@ -43,13 +43,13 @@ return new class extends Migration
             $table->primary(['site_id', 'mission_id']);
         });
 
-        Schema::create('mission_livrable', function (Blueprint $table) {
+        Schema::create('livrable_mission', function (Blueprint $table) {
             $table->foreignIdFor(mission::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(livrable::class)->constrained()->cascadeOnDelete();
             $table->primary(['livrable_id', 'mission_id']);
         });
 
-        
+
     }
 
     /**

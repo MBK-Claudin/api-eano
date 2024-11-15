@@ -13,6 +13,8 @@ use App\Http\Controllers\ContractController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\siteController;
+use App\Http\Controllers\MissionController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +46,8 @@ Route::get('sites', [siteController::class, 'sites']);
 Route::post('insert/site', [siteController::class, 'insertSite']);
 Route::delete('delete/site/{id}', [siteController::class, 'deleteSite']);
 Route::post('edit/site', [siteController::class, 'editSite']);
+Route::get('/sites/from-kobo', [SiteController::class, 'storeFromKoboData']);
+
 
 // Routes Pour les Objectifs stratégiques
 Route::post('insert/objectif/', [ObjectifController::class, 'insertObjectif']);
@@ -124,3 +128,12 @@ Route::get('impacts/update/{id}', [ImpactController::class, 'update']);
 Route::get('impact/delete/{id}', [ImpactController::class, 'delete']);
 
 
+//Route pour les missions
+
+Route::prefix('missions')->group(function () {
+    Route::get('/', [MissionController::class, 'index']);
+    Route::get('/{id}', [MissionController::class, 'show']);
+    Route::post('/insert', [MissionController::class, 'store']);
+    Route::put('/{id}', [MissionController::class, 'update']);
+    Route::delete('/{id}', [MissionController::class, 'destroy']);
+});

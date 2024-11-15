@@ -32,7 +32,7 @@ class mission extends Model
     public function livrables() : BelongsToMany {
         return $this->belongsToMany(livrable::class);
     }
-    
+
 
 
 }
