@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('libelle');
             $table->string('objectif_specifique');
+            $table->string('description_objectif_specifique');
             $table->date('date_debut');
             $table->date('date_fin');
             $table->decimal('Budget_planifier_fcfa', 20, 2)->nullable()->default(0);

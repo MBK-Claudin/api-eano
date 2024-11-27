@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('force');
             $table->string('taille');
             $table->string('mitigation');
-            $table->foreignIdFor(site::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(programme::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(activiteBudgetAnnuel::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(site::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(programme::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(activiteBudgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
