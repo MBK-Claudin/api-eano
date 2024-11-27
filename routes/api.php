@@ -53,6 +53,7 @@ Route::get('/sites/from-kobo', [SiteController::class, 'storeFromKoboData']);
 Route::post('insert/objectif/', [ObjectifController::class, 'insertObjectif']);
 Route::get('objectifs', [ObjectifController::class, 'objectifs']);
 Route::get('select/objectif/{id}', [ObjectifController::class, 'selectObjectif']);
+Route::get('select/edit/objectif/{id}', [ObjectifController::class, 'selectEditObjectif']);
 Route::put('edit/objectif/', [ObjectifController::class, 'editObjectif']);
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
@@ -62,6 +63,7 @@ Route::get('objectif/programme/{id}', [ObjectifController::class, 'objectifProgr
 Route::get('programmes', [ProgrammeController::class, 'programmes']);
 Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme']);
 Route::get('select/programme/{id}', [ProgrammeController::class, 'selectProgramme']);
+Route::get('select/edit/programme/{id}', [ProgrammeController::class, 'selectEditProgramme']);
 Route::put('edit/programme/', [ProgrammeController::class, 'editProgramme']);
 Route::get('programme/facture/{id}', [ProgrammeController::class, 'factures']);
 Route::get('programme/planing/data/{id}', [ProgrammeController::class, 'planingGantt']);
@@ -122,7 +124,7 @@ Route::get('facture/traitement/{idFacture}/{idService}/{user_id}', [FactureContr
 
 //route pour les impacts
 Route::get('impacts/{id}', [ImpactController::class, 'index']);
-Route::get('impacts/insert', [ImpactController::class, 'store']);
+Route::post('impacts/insert', [ImpactController::class, 'store']);
 Route::get('impacts/update/{id}', [ImpactController::class, 'update']);
 Route::get('impact/delete/{id}', [ImpactController::class, 'delete']);
 

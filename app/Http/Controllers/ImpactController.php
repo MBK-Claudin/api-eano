@@ -36,17 +36,19 @@ class ImpactController extends Controller
     // Stocker un nouvel impact
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'programme_id' => 'required|exists:programmes,id',
-            'site_id' => 'required|exists:sites,id',
-            'activite_ptba_id' => 'required|exists:activites_ptba,id',
+        $impact = impact::create([
+            'type_impact' => $request->type,
+            'libelle_impact' => $request->libelle,
+            'force' => $request->force,
+            'taille' => $request->taille,
+            'mitigation' => $request->mitigation,
         ]);
 
-        $impact = Impact::create($validatedData);
+        $impact->programme_id = $request->programme;
+        $impact->site_id = $request->site;
+        $impact->activite_budget_annuel_id = $request->activite;
 
-        return response()->json($impact, 201);
+        return response()->json($impact);
     }
 
     // Afficher un impact spécifique

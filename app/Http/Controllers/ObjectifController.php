@@ -27,12 +27,16 @@ class ObjectifController extends Controller
             'objectif' => $request->objectif,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
+            'description' => $request->description,
         ]);
 
         $organisations = $request->input('organisation');
         $ancrages = $request->input('ancrage');
         $responsables = $request->input('responsable');
         $emails = $request->input('email');
+        $roles = $request->input('role');
+        $userOrganisations = $request->input('userOrganisation');
+        $postes = $request->input('poste');
 
         //dd($organisations, $ancrages);
 
@@ -58,18 +62,24 @@ class ObjectifController extends Controller
             for($i = 0; $i < count($responsables); $i++){
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
+                $role = $roles[$i];
+                $userOrganisation = $userOrganisations[$i];
+                $poste = $postes[$i];
     
-                $user = User::where('name', $responsable)->first();
+                $user = User::where('email', $email)->first();
     
                 if($user){
-                    $user->objectifs()->attach($objectif->id, ['role' => 'responsable']);
+                    $user->objectifs()->attach($objectif->id, ['role' => $role]);
                 }else{
                     $user = User::create([
                         'name' => $responsable,
                         'email' => $email,
                     ]);
+
+                    $org = organisation::where('libelle', $userOrganisation)->first();
     
-                    $user->objectifs()->attach($objectif->id, ['role' => 'responsable']);
+                    $user->objectifs()->attach($objectif->id, ['role' => $role]);
+                    $user->organisations()->attach($org->id, ['poste' => $poste]);
                 }
             }
         }
@@ -79,6 +89,11 @@ class ObjectifController extends Controller
 
     public function selectObjectif($id) {
         $objectif = objectif::with('organisations', 'users.organisations', 'programmes')->find($id);
+        return response()->json($objectif);
+    }
+
+    public function selectEditObjectif($id) {
+        $objectif = objectif::with('organisations', 'users.organisations')->find($id);
         return response()->json($objectif);
     }
 
