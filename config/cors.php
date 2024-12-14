@@ -1,34 +1,33 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
+    | Laravel CORS Configuration
     |--------------------------------------------------------------------------
     |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
+    | This file is where you may configure your CORS settings for your application.
+    | The settings here will be used when handling requests that require CORS.
     |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+    | The CORS configuration is primarily responsible for enabling or disabling
+    | cross-origin requests to your application. You may configure CORS to
+    | accept requests from different domains, set allowed headers, methods, etc.
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie', 'assets/*'],
+    'paths' => ['api/*'],  // Applique CORS uniquement aux routes API
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['*'],  // Autorise toutes les méthodes HTTP (GET, POST, PUT, DELETE, etc.)
 
-    'allowed_origins' => ['http://localhost:4200'],
+    'allowed_origins' => ['http://localhost:4200'],  // Autorise l'origine de votre application Angular
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [],  // Vous pouvez utiliser des expressions régulières si nécessaire
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['*'],  // Autorise tous les en-têtes dans la requête
 
-    'exposed_headers' => [],
+    'exposed_headers' => [],  // Si vous avez des en-têtes spécifiques à exposer à la réponse
 
-    'max_age' => 0,
+    'max_age' => 0,  // Temps en secondes que les résultats CORS peuvent être mis en cache
 
-    'supports_credentials' => false,
-
+    'supports_credentials' => false,  // Si vous devez envoyer des cookies ou des informations d'authentification, passez à true
 ];

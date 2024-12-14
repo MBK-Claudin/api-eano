@@ -7,6 +7,7 @@ use App\Models\organisation;
 use App\Models\programme;
 use App\Models\site;
 use App\Models\User;
+use App\Models\BudgetAnnuel;
 use Illuminate\Http\Request;
 
 class ProgrammeController extends Controller
@@ -24,6 +25,7 @@ class ProgrammeController extends Controller
             'objectif_specifique' => $request->objectif_specifique,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
+            'description_objectif_specifique' => $request->input('description_objectif_specifique') // correction ici
         ]);
 
         $objectif->programmes()->save($programme);
@@ -39,16 +41,16 @@ class ProgrammeController extends Controller
             for($i = 0; $i < count($organisations); $i++){
                 $organisation = $organisations[$i];
                 $ancrage = $ancrages[$i];
-    
+
                 $isOrganisation = organisation::where('libelle', $organisation)->first();
-    
+
                 if($isOrganisation){
                     $programme->organisations()->attach($isOrganisation->id, ['ancrage' => $ancrage]);
                 }else{
                     $organisation = Organisation::create([
                         'libelle' => $organisation,
                     ]);
-    
+
                     $programme->organisations()->attach($organisation->id, ['ancrage' => $ancrage]);
                 }
             }
@@ -58,9 +60,9 @@ class ProgrammeController extends Controller
             for($i = 0; $i < count($responsables); $i++){
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
-    
+
                 $user = User::where('email', $email)->first();
-    
+
                 if($user){
                     $user->programmes()->attach($programme->id, ['role' => 'responsable']);
                 }else{
@@ -70,7 +72,7 @@ class ProgrammeController extends Controller
                         'email' => $email,
                         'photo_url' => $photo,
                     ]);
-    
+
                     $user->programmes()->attach($programme->id, ['role' => 'responsable']);
                 }
             }
@@ -98,7 +100,7 @@ class ProgrammeController extends Controller
         $programme->save();
 
         $programme->organisations()->detach();
-        $programme->users()->detach();  
+        $programme->users()->detach();
 
         $organisations = $request->input('organisation');
         $ancrages = $request->input('ancrage');
@@ -111,16 +113,16 @@ class ProgrammeController extends Controller
             for($i = 0; $i < count($organisations); $i++){
                 $organisation = $organisations[$i];
                 $ancrage = $ancrages[$i];
-    
+
                 $isOrganisation = Organisation::where('libelle', $organisation)->first();
-    
+
                 if($isOrganisation){
                     $programme->organisations()->attach($isOrganisation->id, ['ancrage' => $ancrage]);
                 }else{
                     $organisation = Organisation::create([
                         'libelle' => $organisation,
                     ]);
-    
+
                     $programme->organisations()->attach($organisation->id, ['ancrage' => $ancrage]);
                 }
             }
@@ -130,9 +132,9 @@ class ProgrammeController extends Controller
             for($i = 0; $i < count($responsables); $i++){
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
-    
+
                 $user = User::where('name', $responsable)->first();
-    
+
                 if($user){
                     $user->programmes()->attach($programme->id, ['role' => 'responsable']);
                 }else{
@@ -140,7 +142,7 @@ class ProgrammeController extends Controller
                         'name' => $responsable,
                         'email' => $email,
                     ]);
-    
+
                     $user->programmes()->attach($programme->id, ['role' => 'responsable']);
                 }
             }

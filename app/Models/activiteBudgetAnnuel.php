@@ -47,9 +47,6 @@ class activiteBudgetAnnuel extends Model
         return $this->hasMany(contract::class);
     }
 
-    public function impacts()
-    {
-        return $this->hasMany(Impact::class);
-    }
+ 
 
 }

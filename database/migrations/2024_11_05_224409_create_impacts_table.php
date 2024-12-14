@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('taille');
             $table->string('mitigation');
             $table->foreignId('programme_id')->constrained('programmes')->onDelete('cascade');
-            $table->foreignId('activite_budget_annuel_id')->constrained('activite_budget_annuels')->onDelete('cascade');
+            $table->foreignId('activite_id')->constrained('activites')->onDelete('cascade');
             $table->timestamps();
         });
     }

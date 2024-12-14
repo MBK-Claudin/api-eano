@@ -16,7 +16,8 @@ class activite extends Model
         'libelle',
         'date_debut',
         'date_fin',
-        'budget'
+        'budget',
+        'statut'
     ];
 
     public function users() : BelongsToMany {
@@ -41,5 +42,10 @@ class activite extends Model
 
     public function missions () : BelongsToMany {
         return $this->belongsToMany(mission::class);
+    }
+
+    public function impacts()
+    {
+        return $this->belongsToMany(Impact::class);
     }
 }

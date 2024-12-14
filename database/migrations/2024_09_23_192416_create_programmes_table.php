@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('objectif_specifique');
             $table->date('date_debut');
             $table->date('date_fin');
-            $table->decimal('Budget_planifier_fcfa', 20, 2)->nullable()->default(0);
-            $table->decimal('Budget_planifier_us', 20, 2)->nullable()->default(0);
-            $table->decimal('Budget_executer_fcfa', 20, 2)->nullable()->default(0);
-            $table->decimal('Budget_executer_us', 20, 2)->nullable()->default(0);
+            $table->bigInteger('Budget_planifier_fcfa')->nullable();
+            $table->bigInteger('Budget_planifier_us')->nullable();
+            $table->bigInteger('Budget_executer_fcfa')->nullable();
+            $table->bigInteger('Budget_executer_us')->nullable();
             $table->string('statut')->nullable();
             $table->string('echeance')->nullable();
             $table->string('taux_execution_physique')->nullable();
@@ -46,7 +46,7 @@ return new class extends Migration
             $table->primary(['programme_id', 'organisation_id']);
             $table->string('ancrage')->nullable();
         });
-        
+
     }
 
     /**

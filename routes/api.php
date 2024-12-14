@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\FactureController;
 use App\Http\Controllers\ImpactController;
+use App\Http\Controllers\FinancementController;
 use App\Http\Controllers\siteController;
 use App\Http\Controllers\MissionController;
 
@@ -33,6 +34,8 @@ Route::get('user/taches/{id}', [UserController::class, 'taches']);
 Route::get('users', [UserController::class, 'users'])->name('users');
 Route::get('users/programme/{id}', [UserController::class, 'usersProgramme'])->name('users.programme');
 Route::post('insert/contributeur/', [UserController::class, 'insertContributeurs'])->name('users.insert');
+Route::post('login/mail/', [UserController::class, 'logins']);
+
 Route::post('user/organisation', [UserController::class, 'userOrganisation']);
 
 // Routes Organisations
@@ -48,7 +51,6 @@ Route::delete('delete/site/{id}', [siteController::class, 'deleteSite']);
 Route::post('edit/site', [siteController::class, 'editSite']);
 Route::get('/sites/from-kobo', [SiteController::class, 'storeFromKoboData']);
 
-
 // Routes Pour les Objectifs stratégiques
 Route::post('insert/objectif/', [ObjectifController::class, 'insertObjectif']);
 Route::get('objectifs', [ObjectifController::class, 'objectifs']);
@@ -57,6 +59,7 @@ Route::put('edit/objectif/', [ObjectifController::class, 'editObjectif']);
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
 Route::delete('delete/objectif/{id}', [ObjectifController::class, 'deleteObjectif']);
 Route::get('objectif/programme/{id}', [ObjectifController::class, 'objectifProgramme']);
+
 // Routes Pour les programmes
 Route::get('programmes', [ProgrammeController::class, 'programmes']);
 Route::post('insert/programme/', [ProgrammeController::class, 'insertProgramme']);
@@ -82,7 +85,6 @@ Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activi
 Route::delete('budgetannuel/delete/activite/{id}', [budgetAnnuelController::class, 'deleteActivite']);
 Route::get('all/budgetannuels/', [budgetAnnuelController::class, 'allBudget']);
 
-// Routes pour les Anos
 Route::post('insert/ano/', [AnoController::class, 'insertAno']);
 Route::get('ano', [AnoController::class, 'ano']);
 Route::get('select/edit/ano/{id}', [AnoController::class, 'selectEditAno']);
@@ -122,10 +124,10 @@ Route::get('facture/etatActuel/{id}', [FactureController::class, 'etatActuel']);
 Route::get('facture/traitement/{idFacture}/{idService}/{user_id}', [FactureController::class, 'traitementFacture']);
 
 //route pour les impacts
-Route::get('impacts/{id}', [ImpactController::class, 'index']);
-Route::get('impacts/insert', [ImpactController::class, 'store']);
-Route::get('impacts/update/{id}', [ImpactController::class, 'update']);
-Route::get('impact/delete/{id}', [ImpactController::class, 'delete']);
+Route::get('impacts/{programme_id}', [ImpactController::class, 'index']);
+Route::post('impacts/insert', [ImpactController::class, 'store']);
+Route::put('impacts/update/{id}', [ImpactController::class, 'update']);
+Route::put('impact/delete/{id}', [ImpactController::class, 'delete']);
 
 
 //Route pour les missions
@@ -137,3 +139,12 @@ Route::prefix('missions')->group(function () {
     Route::put('/{id}', [MissionController::class, 'update']);
     Route::delete('/{id}', [MissionController::class, 'destroy']);
 });
+
+//route pour le financement
+Route::get('financement/{programme_id}', [FinancementController::class, 'index']);
+Route::post('financement/insert', [FinancementController::class, 'store']);
+Route::get('financement/show/{id}', [FinancementController::class, 'show']);
+Route::put('financement/update/{id}', [FinancementController::class, 'update']);
+Route::delete('financement/delete/{id}', [FinancementController::class, 'destroy']);
+
+

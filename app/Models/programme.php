@@ -14,6 +14,7 @@ class programme extends Model
     protected $fillable = [
         'libelle',
         'objectif_specifique',
+        'description_objectif_specifique',
         'date_debut',
         'date_fin',
         'Budget_planifier_fcfa',
@@ -38,7 +39,7 @@ class programme extends Model
         return $this->belongsToMany(organisation::class)->withPivot('ancrage');
     }
 
-    public function budgetannuels (){
-        return $this->hasMany(budgetannuel::class);
+    public function budgetAnnuels(){
+        return $this->hasMany(budgetAnnuel::class);
     }
 }

@@ -17,7 +17,6 @@ return new class extends Migration
         Schema::create('financements', function (Blueprint $table) {
             $table->id();
             $table->string('type_financement');
-            $table->string('partenaire');
             $table->string('montant');
             $table->string('principale');
             $table->foreignIdFor(budgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();  // Clé étrangère vers BudgetAnuel

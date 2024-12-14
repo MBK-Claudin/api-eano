@@ -12,13 +12,12 @@ class impact extends Model
 protected $fillable=[
     'type_impact',
     'libelle_impact',
-    'activite_ptba',
     'force',
     'site_id',
     'taille',
     'mitigation',
     'programme_id',
-    'activite_budget_annuel_id'
+    'activite_id'
 
 ];
 
@@ -34,8 +33,8 @@ protected $fillable=[
         return $this->belongsTo(Site::class);
     }
 
-    public function activiteBudgetAnnuel()
+    public function activite()
     {
-        return $this->belongsTo(ActiviteBudgetAnnuel::class);
+        return $this->belongsTo(activite::class);
     }
 }

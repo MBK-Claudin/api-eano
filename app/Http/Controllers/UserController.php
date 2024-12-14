@@ -7,12 +7,16 @@ use App\Models\objectif;
 use App\Models\organisation;
 use App\Models\programme;
 use App\Models\User;
+use App\Models\Role;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function users () {
-        $user = User::all();
+        $user= User::with('roles')->get();
+        // $user = User::all();
         return response()->json($user);
     }
 
@@ -29,14 +33,14 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email
         ]);
-        
+
         if ($request->hasFile('photo')) {
             // Récupération du fichier uploadé
             $image = $request->file('photo');
-            
+
             // Génération d'un nom unique pour l'image
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            
+
             // Déplacement du fichier vers le répertoire public/assets/images
             $destinationPath = public_path('/assets/images/');
             $image->move($destinationPath, $imageName);
@@ -51,7 +55,7 @@ class UserController extends Controller
         $organisation = organisation::where('libelle',$request->organisations)->first();
 
         if($organisation){
-            
+
             $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
             return response()->json($user);
         }else{
@@ -59,14 +63,14 @@ class UserController extends Controller
             $organisation = organisation::create([
                 'libelle' => $request->organisations,
             ]);
-            
+
             $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
             return response()->json($user);
         }
     }
 
     public function userOrganisation(Request $request){
-        
+
         $request->validate([
             'org' => 'required',
             'poste' => 'required',
@@ -105,4 +109,36 @@ class UserController extends Controller
             'livrable'=> $livrable->livrables,
         ]);
     }
+
+
+
+    public function logins(Request $request)
+    {
+        // Validation des données
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 400);
+        }
+
+        // Trouver l'utilisateur
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Email or password is incorrect'], 401);
+        }
+
+        // Retourner le rôle de l'utilisateur
+        return response()->json([
+            'message' => 'Login successful',
+            'photo'=> $user->photo_url,
+            'email'=> $user->email,
+            'role' => $user->role->name,
+        ]);
+    }
+
+
 }

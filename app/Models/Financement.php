@@ -10,7 +10,6 @@ class Financement extends Model
     use HasFactory;
 protected $fillable = [
     'type_financement',
-    'partenaire',
     'montant',
     'principale',
     'budgetAnnuel',

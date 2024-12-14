@@ -18,9 +18,9 @@ return new class extends Migration
             $table->date('date_debut')->nullable();
             $table->date('date_fin')->nullable();
             $table->string('statut')->nullable();
-            $table->decimal('Budget_planifier_fcfa', 20, 2)->nullable()->default(0);
-            $table->decimal('Budget_planifier_us', 20, 2)->nullable()->default(0);
-            $table->decimal('Budget_executer',20,2)->nullable()->default(0);
+            $table->bigInteger('Budget_planifier_fcfa')->nullable()->default(0);
+            $table->bigInteger('Budget_planifier_us')->nullable()->default(0);
+            $table->bigInteger('Budget_executer')->nullable()->default(0);
             $table->string('file_name');
             $table->string('file_path');
             $table->string('file_url');

@@ -66,7 +66,7 @@ class User extends Authenticatable
     public function activiteBudgetAnnuels ():BelongsToMany {
         return $this->belongsToMany(activiteBudgetAnnuel::class)->withPivot('role');
     }
-    
+
 
     public function anos () : BelongsToMany {
         return $this->belongsToMany(ano::class)->withPivot('action', 'role');
@@ -83,4 +83,12 @@ class User extends Authenticatable
     public function missions () : BelongsToMany {
         return $this->belongsToMany(mission::class)->withPivot('role');
     }
+
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+
 }
