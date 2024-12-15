@@ -25,6 +25,9 @@ class UserController extends Controller
         return response()->json($programme->users);
     }
 
+
+
+
     public function insertContributeurs (Request $request) {
 
         $programme = programme::find($request->programme_id);
@@ -68,6 +71,71 @@ class UserController extends Controller
             return response()->json($user);
         }
     }
+
+
+
+
+    public function updateContributeurs(Request $request, $id) {
+        // Validation des données d'entrée
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id, // Éviter les doublons pour l'email
+            'programme_id' => 'required|exists:programmes,id',
+            'organisations' => 'required|string',
+            'role' => 'required|string',
+            'poste' => 'required|string',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation de l'image
+        ]);
+
+        // Trouver l'utilisateur par son ID
+        $user = User::findOrFail($id);
+
+        // Mise à jour des informations de l'utilisateur
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        // Gérer l'upload de la photo (si présente)
+        if ($request->hasFile('photo')) {
+            // Récupération du fichier uploadé
+            $image = $request->file('photo');
+
+            // Génération d'un nom unique pour l'image
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Déplacement du fichier vers le répertoire public/assets/images
+            $destinationPath = public_path('/assets/images/');
+            $image->move($destinationPath, $imageName);
+
+            // Enregistrement du chemin de l'image (URL) dans la base de données
+            $user->photo_url = asset('/assets/images/' . $imageName);
+            $user->save(); // Sauvegarde après l'ajout de la photo
+        }
+
+        // Attacher l'utilisateur au programme avec son rôle
+        $programme = programme::findOrFail($request->programme_id);
+        $user->programmes()->syncWithoutDetaching([$programme->id => ['role' => $request->role]]);
+
+        // Gestion de l'organisation
+        $organisation = organisation::where('libelle', $request->organisations)->first();
+
+        if ($organisation) {
+            // Si l'organisation existe, on l'attache à l'utilisateur
+            $user->organisations()->syncWithoutDetaching([$organisation->id => ['poste' => $request->poste]]);
+        } else {
+            // Si l'organisation n'existe pas, on la crée et on l'associe à l'utilisateur
+            $organisation = organisation::create([
+                'libelle' => $request->organisations,
+            ]);
+
+            // Attacher l'organisation à l'utilisateur
+            $user->organisations()->syncWithoutDetaching([$organisation->id => ['poste' => $request->poste]]);
+        }
+
+        return response()->json($user, 200);
+    }
+
 
     public function userOrganisation(Request $request){
 
@@ -140,5 +208,56 @@ class UserController extends Controller
         ]);
     }
 
+
+
+
+
+public function addOrCreateContributeurToProgramme(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'name' => 'required|string',
+        'role' => 'required|string',
+    ]);
+
+    $programme = programme::find($request->programme_id);
+
+
+    if (!$programme) {
+        return response()->json(['message' => 'Programme not found'], 404);
+    }
+
+    $user = User::where('email', $request->email)->first();
+
+
+    if (!$user) {
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt('defaultpassword123'),
+        ]);
+    }
+
+
+    if ($programme->users()->where('user_id', $user->id)->exists()) {
+        return response()->json([
+            'message' => 'User is already a contributor to this programme',
+            'programme_id' => $programmeId,
+            'user_id' => $user->id,
+        ], 200);
+    }
+
+    $programme->users()->attach($user->id, [
+        'role' => $request->role,
+        'added_at' => now()
+    ]);
+
+    return response()->json([
+        'message' => 'User successfully added as a contributor to the programme',
+        'programme_id' => $programmeId,
+        'user_id' => $user->id,
+        'role' => $request->role,
+    ], 201);
+}
 
 }

@@ -32,6 +32,7 @@ Route::get('user/taches/{id}', [UserController::class, 'taches']);
 
 // Routes Users
 Route::get('users', [UserController::class, 'users'])->name('users');
+Route::put('user/updateprogramme/{id}', [UserController::class,'updateContributeurs']);
 Route::get('users/programme/{id}', [UserController::class, 'usersProgramme'])->name('users.programme');
 Route::post('insert/contributeur/', [UserController::class, 'insertContributeurs'])->name('users.insert');
 Route::post('login/mail/', [UserController::class, 'logins']);
@@ -75,7 +76,7 @@ Route::delete('delete/programme/{id}', [ProgrammeController::class, 'deleteProgr
 Route::get('programme/planTrasnformation/{id}', [ProgrammeController::class, 'trasnformation']);
 
 // Routes Pour les budgets annuels (PTBA)
-Route::post('insert/budgetannuel/', [budgetAnnuelController::class, 'insertBudgetAnnuel']);
+Route::post('insert/budgetannuel', [budgetAnnuelController::class, 'insertBudgetAnnuel']);
 Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailBudgetAnnuel']);
 Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
 Route::get('budgetannuel/activites', [budgetAnnuelController::class, 'activites']);
@@ -83,9 +84,9 @@ Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activi
 
 //Route::get('');
 Route::delete('budgetannuel/delete/activite/{id}', [budgetAnnuelController::class, 'deleteActivite']);
-Route::get('all/budgetannuels/', [budgetAnnuelController::class, 'allBudget']);
+Route::get('all/budgetannuels', [budgetAnnuelController::class, 'allBudget']);
 
-Route::post('insert/ano/', [AnoController::class, 'insertAno']);
+Route::post('insert/ano', [AnoController::class, 'insertAno']);
 Route::get('ano', [AnoController::class, 'ano']);
 Route::get('select/edit/ano/{id}', [AnoController::class, 'selectEditAno']);
 Route::post('edit/ano', [AnoController::class, 'editAno']);

@@ -86,6 +86,9 @@ class ProgrammeController extends Controller
         return response()->json($programme);
     }
 
+
+
+
     public function editProgramme(Request $request){
         //dd($request->all());
 
