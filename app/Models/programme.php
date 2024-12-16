@@ -42,4 +42,11 @@ class programme extends Model
     public function budgetAnnuels(){
         return $this->hasMany(budgetAnnuel::class);
     }
+
+    public function missions(){
+        return $this->hasMany(mission::class);
+    }
+    public function financements(){
+        return $this->hasMany(Financement::class);
+    }
 }

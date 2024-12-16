@@ -133,13 +133,12 @@ Route::put('impact/delete/{id}', [ImpactController::class, 'delete']);
 
 //Route pour les missions
 
-Route::prefix('missions')->group(function () {
-    Route::get('/', [MissionController::class, 'index']);
-    Route::get('/{id}', [MissionController::class, 'show']);
-    Route::post('/insert', [MissionController::class, 'store']);
-    Route::put('/{id}', [MissionController::class, 'update']);
-    Route::delete('/{id}', [MissionController::class, 'destroy']);
-});
+    Route::get('mission/{programme_id}', [MissionController::class, 'getMission']);
+    Route::get('mission/show/{id}', [MissionController::class, 'show']);
+    Route::post('mission/insert', [MissionController::class, 'store']);
+    Route::put('mission/update/{id}', [MissionController::class, 'update']);
+    Route::delete('mission/delete/{id}', [MissionController::class, 'destroy']);
+
 
 //route pour le financement
 Route::get('financement/{programme_id}', [FinancementController::class, 'index']);

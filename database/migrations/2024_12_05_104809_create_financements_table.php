@@ -19,9 +19,11 @@ return new class extends Migration
             $table->string('type_financement');
             $table->string('montant');
             $table->string('principale');
-            $table->foreignIdFor(budgetAnnuel::class)->nullable()->constrained()->cascadeOnDelete();  // Clé étrangère vers BudgetAnuel
-            $table->foreignIdFor(organisation::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(programme::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->string('montant_usd');
+            $table->string('statut');
+            $table->foreignId('budgetAnnuel_id')->constrained('budget_annuels')->onDelete('cascade');
+            $table->foreignId('organisation_id')->constrained('organisations')->onDelete('cascade');
+            $table->foreignId('programme_id')->constrained('programmes')->onDelete('cascade');
             $table->timestamps();
 
         });

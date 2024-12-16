@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Mission;
+use App\Models\mission;
 use Illuminate\Http\Request;
 
 class MissionController extends Controller
 {
     // Afficher toutes les missions
-    public function index($programmeId)
+    public function getMission($programmeId)
     {
-        $missions = Mission::with(['programme','activite', 'users', 'sites'])
+        $missions = Mission::with(['programme','activite', 'user', 'site'])
         ->where('programme_id', $programmeId)
         ->get();
 
-        if (!$mission) {
+        if (!$missions) {
             return response()->json(['message' => 'mission non trouvé'], 404);
         }
 
@@ -22,12 +22,13 @@ class MissionController extends Controller
             return [
             'programme_id' => $mission->programme_id,
             'id' => $mission->id,
+            'libelle' => $mission->libelle,
             'description' => $mission->description,
             'objectif' => $mission->objectif,
             'date_debut' => $mission->date_debut,
-            'programme' => $mission->programme_id,
             'statut' => $mission->statut,
-            'activite' => $mission->activite_id ? $mission->activite->libelle : null,
+            'site' => $mission->site_id ? $mission->site->libelle : null,
+            'activite' => $impact->activite_id ? $impact->activite->libelle : null,
             'responsable' => $mission->user_id ? $mission->user->name : null,
 
         ];
@@ -38,7 +39,7 @@ class MissionController extends Controller
     // Afficher une mission spécifique
     public function show($id)
     {
-        $mission = Mission::with(['activite', 'users', 'sites'])->find($id);
+        $mission = Mission::with(['activite', 'user', 'site'])->find($id);
 
         if (!$mission) {
             return response()->json(['message' => 'Mission not found'], 404);
@@ -55,14 +56,14 @@ class MissionController extends Controller
         $mission = Mission::create([
 
             'libelle' => $request->libelle,
-            'description' => $request->description,
+            'description' => $request->definition_objectif_specifique,
             'objectif' => $request->objectif,
             'date_debut' => $request->date_debut ,
             'statut' => $request->statut,
-            'site_id' => $request->site_id,
-            'programme_id' => $request->programme_id,
-            'activite_id' => $request->activite_id,
-            'user_id' => $request->user_id
+            'site_id' => $request->site,
+            'programme_id' => $request->programme,
+            'activite_id' => $request->activite,
+            'user_id' => $request->user
 
         ]);
 

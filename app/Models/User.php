@@ -80,8 +80,8 @@ class User extends Authenticatable
         return $this->belongsToMany(livrable::class)->withPivot('role');
     }
 
-    public function missions () : BelongsToMany {
-        return $this->belongsToMany(mission::class)->withPivot('role');
+    public function missions () : HasMany {
+        return $this->hasMany(mission::class);
     }
 
 

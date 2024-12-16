@@ -13,26 +13,37 @@ class mission extends Model
 
     protected $fillable =[
         'libelle',
-        'description',
         'objectif',
+        'description',
+        'statut',
+        'date_debut',
+         'programme_id',
+        'activite_id',
+        'site_id',
+        'user_id',
+
     ];
 
-    public function activite () : BelongsToMany {
-        return $this->belongsToMany(activite::class);
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class); // ou une autre relation appropriée
     }
 
-    public function users () : BelongsToMany {
-        return $this->belongsToMany(User::class)->withPivot('role');
+    public function programme()
+    {
+        return $this->belongsTo(programme::class);
     }
 
-    public function sites() : BelongsToMany {
-        return $this->belongsToMany(site::class);
+    public function site()
+    {
+        return $this->belongsTo(site::class);
     }
 
-    public function livrables() : BelongsToMany {
-        return $this->belongsToMany(livrable::class);
+    public function activite()
+    {
+        return $this->belongsTo(activite::class);
     }
-
-
 
 }

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('libelle');
             $table->string('description');
             $table->string('objectif');
-            $table->date('date_debut');
+            $table->date('date_debut')->nullable();
             $table->string('statut');
             $table->foreignId('programme_id')->constrained('programmes')->onDelete('cascade');
             $table->foreignId('site_id')->constrained('sites')->onDelete('cascade');
