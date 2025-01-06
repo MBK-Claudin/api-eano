@@ -26,7 +26,7 @@ class site extends Model
     }
 
     public function missions () : BelongsToMany {
-        return $this->belongsToMany(mission::class);
+        return $this->hasMany(mission::class);
     }
 
     public function impacts()

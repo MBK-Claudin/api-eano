@@ -20,7 +20,7 @@ class budgetAnnuelController extends Controller
             'date_fin' => 'required',
             'excel' => 'required',
         ]);
-        
+
         $document = $request->file('excel');
         $filePath = $document->store('documents', 'local');
         $fileUrl = Storage::url($filePath);
@@ -80,4 +80,29 @@ class budgetAnnuelController extends Controller
         $budgets = budgetAnnuel::with('programme')->get();
         return response()->json($budgets);
     }
+
+
+    public function deleteBudget($id)
+{
+    // Récupérer le budget annuel
+    $budget = budgetAnnuel::find($id);
+
+    if (!$budget) {
+        return response()->json(['message' => 'Budget not found'], 404);
+    }
+
+    // Supprimer le fichier Excel associé si présent
+    if ($budget->file_path && Storage::exists($budget->file_path)) {
+        Storage::delete($budget->file_path);
+    }
+
+    // Supprimer le budget de la base de données
+    $budget->delete();
+
+    return response()->json([
+        'message' => 'Budget Annuel deleted successfully',
+        'budget_id' => $id,
+    ], 200);
+}
+
 }

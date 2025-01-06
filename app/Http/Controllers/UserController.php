@@ -260,4 +260,39 @@ public function addOrCreateContributeurToProgramme(Request $request)
     ], 201);
 }
 
+
+public function removeContributeurFromProgramme($programme_id, $user_id)
+{
+    // Récupérer le programme
+    $programme = Programme::find($programme_id);
+
+    if (!$programme) {
+        return response()->json(['message' => 'Programme not found'], 404);
+    }
+
+    // Récupérer l'utilisateur
+    $user = User::find($user_id);
+
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
+    }
+
+    // Vérifier si l'utilisateur est lié au programme
+    if (!$programme->users()->where('user_id', $user->id)->exists()) {
+        return response()->json([
+            'message' => 'User is not a contributor to this programme'
+        ], 404);
+    }
+
+    // Supprimer la relation
+    $programme->users()->detach($user->id);
+
+    return response()->json([
+        'message' => 'Contributor removed successfully from the programme',
+        'programme_id' => $programme_id,
+        'user_id' => $user_id,
+    ], 200);
+}
+
+
 }

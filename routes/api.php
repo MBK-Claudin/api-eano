@@ -34,6 +34,8 @@ Route::get('user/taches/{id}', [UserController::class, 'taches']);
 Route::get('users', [UserController::class, 'users'])->name('users');
 Route::put('user/updateprogramme/{id}', [UserController::class,'updateContributeurs']);
 Route::get('users/programme/{id}', [UserController::class, 'usersProgramme'])->name('users.programme');
+Route::get('/programmes/{programme_id}/users/{user_id}', [UserController::class, 'removeContributeurFromProgramme'])->name('users.delete');
+
 Route::post('insert/contributeur/', [UserController::class, 'insertContributeurs'])->name('users.insert');
 Route::post('login/mail/', [UserController::class, 'logins']);
 
@@ -81,6 +83,8 @@ Route::get('details/budgetannuel/{id}', [budgetAnnuelController::class, 'detailB
 Route::get('budgetannuels/{id}', [budgetAnnuelController::class, 'budgetannuels']);
 Route::get('budgetannuel/activites', [budgetAnnuelController::class, 'activites']);
 Route::get('budgetannuel/activite/{id}', [budgetAnnuelController::class, 'activite']);
+Route::delete('budgetannuel/delete/{id}', [budgetAnnuelController::class, 'deleteBudget']);
+
 
 //Route::get('');
 Route::delete('budgetannuel/delete/activite/{id}', [budgetAnnuelController::class, 'deleteActivite']);
@@ -128,7 +132,7 @@ Route::get('facture/traitement/{idFacture}/{idService}/{user_id}', [FactureContr
 Route::get('impacts/{programme_id}', [ImpactController::class, 'index']);
 Route::post('impacts/insert', [ImpactController::class, 'store']);
 Route::put('impacts/update/{id}', [ImpactController::class, 'update']);
-Route::put('impact/delete/{id}', [ImpactController::class, 'delete']);
+Route::delete('impact/delete/{id}', [ImpactController::class, 'destroy']);
 
 
 //Route pour les missions
@@ -142,7 +146,7 @@ Route::put('impact/delete/{id}', [ImpactController::class, 'delete']);
 
 //route pour le financement
 Route::get('financement/{programme_id}', [FinancementController::class, 'index']);
-Route::post('financement/insert', [FinancementController::class, 'store']);
+Route::post('/financement/insert', [FinancementController::class, 'store']);
 Route::get('financement/show/{id}', [FinancementController::class, 'show']);
 Route::put('financement/update/{id}', [FinancementController::class, 'update']);
 Route::delete('financement/delete/{id}', [FinancementController::class, 'destroy']);

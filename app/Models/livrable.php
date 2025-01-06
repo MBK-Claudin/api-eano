@@ -13,14 +13,19 @@ class livrable extends Model
 
     protected $fillable = [
         'livrable',
+        'user_id',
+        'activite_id',
+        'programme_id'
     ];
 
-    public function documents () : BelongsTo {
-        return $this->belongsTo(documentsLivrable::class);
+    public function documents()
+    {
+        return $this->hasMany(documentsLivrable::class, 'livrable_id'); // Ajustez 'livrable_id' si votre clé étrangère a un autre nom
     }
 
-    public function users () : BelongsToMany {
-        return $this->belongsToMany(User::class)->withPivot('role');
+
+    public function user () : belongsTo {
+        return $this->belongsTo(User::class);
     }
 
     public function activite() : BelongsTo {
@@ -29,5 +34,9 @@ class livrable extends Model
 
     public function missions () : BelongsToMany {
         return $this->belongsToMany(mission::class);
+    }
+
+    public function programme () : belongsTo {
+        return $this->belongsTo(programme::class);
     }
 }

@@ -17,17 +17,12 @@ return new class extends Migration
         Schema::create('livrables', function (Blueprint $table) {
             $table->id();
             $table->string('livrable');
-            $table->foreignIdFor(activite::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('activite_id')->constrained('activites')->onDelete('cascade');
             $table->timestamps();
         });
-
-        Schema::create('livrable_user', function (Blueprint $table) {
-            $table->foreignIdFor(livrable::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
-            $table->primary(['livrable_id', 'user_id']);
-            $table->string('role');
-        });
     }
+
 
     /**
      * Reverse the migrations.

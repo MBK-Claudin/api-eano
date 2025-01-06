@@ -30,23 +30,22 @@ class programme extends Model
     public function objectif() {
         return $this->belongsTo(objectif::class);
     }
-
     public function users(){
         return $this->belongsToMany(User::class)->withPivot('role');
     }
-
     public function organisations(){
         return $this->belongsToMany(organisation::class)->withPivot('ancrage');
     }
-
     public function budgetAnnuels(){
         return $this->hasMany(budgetAnnuel::class);
     }
-
     public function missions(){
         return $this->hasMany(mission::class);
     }
     public function financements(){
         return $this->hasMany(Financement::class);
+    }
+    public function livrables(){
+        return $this->hasMany(livrable::class);
     }
 }
