@@ -34,21 +34,20 @@ class livrableController extends Controller
         ]);
 
         $livrable->save();
-
         $titres = $request->input('titres');
-
         if ($request->hasFile('documents')) {
             // Traitement des fichiers envoyés
+
             foreach ($request->file('documents') as $index => $file) {
 
                 // Définir le chemin de destination pour les documents
-                $destinationPath = ' api-eano/public/assets/documents';  // Chemin dans le répertoire public
+                $destinationPath = 'assets/documents';  // Chemin dans le répertoire public
                 // Sauvegarder le fichier dans le répertoire public/assets/documents avec un nom unique
                 $filename = uniqid() . '_' . $file->getClientOriginalName();
                 $filePath = $file->move(public_path($destinationPath), $filename);
 
                 // Utiliser la fonction asset() pour générer l'URL publique du fichier
-                $fileUrl = asset(' api-eano/public/assets/documents/' . $filename);
+                $fileUrl = asset('https://cgpgabon24.alwaysdata.net/api-eano/public/assets/documents/' . $filename);
 
                 // Enregistrer les informations du document dans la base de données
                 $document = new DocumentsLivrable();
