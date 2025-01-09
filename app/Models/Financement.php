@@ -13,6 +13,7 @@ protected $fillable = [
     'montant',
     'principale',
     'budgetAnnuel',
+    'montant_usd',
     'organisation_id',
     'programme_id'
 

@@ -48,4 +48,7 @@ class programme extends Model
     public function livrables(){
         return $this->hasMany(livrable::class);
     }
+    public function contracts(){
+        return $this->hasMany(contract::class);
+    }
 }

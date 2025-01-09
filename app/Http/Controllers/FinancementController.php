@@ -46,15 +46,17 @@ class FinancementController extends Controller
         $financement = Financement::create([
             'type_financement' => $request->type_financement,
             'montant' => $request->montant,
-            'partenaire' => $request->partenaire,
+            'principale' => $request->principale,
             'montant_usd' => $request->montant_usd,
+            'budgetAnnuel_id'=> $request->budgetAnnuel_id,
+            'organisation_id'=> $request->partenaire,
             'statut' => $request->statut,
             'programme_id' => $request->programme_id,
         ]);
 
         return response()->json([
             'message' => 'Financement créé avec succès',
-            'data' => $financement
+            
         ], 201);
     }
 

@@ -18,6 +18,7 @@ class contract extends Model
         'montant',
         'montant_decaisse',
         'montant_restant',
+        'programme_id'
     ];
 
     public function factures () : HasMany {
@@ -27,4 +28,10 @@ class contract extends Model
     public function activitebudgetannuel () : BelongsTo {
         return $this->belongsTo(activiteBudgetAnnuel::class);
     }
+
+    public function programme()
+{
+    return $this->belongsTo(Programme::class);
+}
+
 }
