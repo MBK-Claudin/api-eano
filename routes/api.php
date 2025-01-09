@@ -112,6 +112,9 @@ Route::get('activite/activitebudgetannuel/{id}', [ActiviteController::class, 'ja
 // Routes livrable
 Route::post('insert/livrable', [livrableController::class, 'insertLivrable']);
 Route::get('livrable/{id}', [livrableController::class, 'livrable']);
+Route::get('livrable/delete/{id}', [livrableController::class, 'deleteLivrable']);
+Route::get('livrable/update/{id}', [livrableController::class, 'updateLivrable']);
+
 
 // Routes pour les contracts
 Route::get('contracts/{id}', [ContractController::class, 'contracts']);
