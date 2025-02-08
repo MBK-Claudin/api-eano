@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable, HasApiTokens;
 
@@ -90,5 +92,17 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function evenements() : HasMany {
+        return $this->hasMany(evenement::class);
+    }
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey(); // Retourne l'identifiant unique de l'utilisateur
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return []; // Tu peux ajouter des claims personnalisés si nécessaire
+    }
 }

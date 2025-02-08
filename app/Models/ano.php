@@ -42,4 +42,8 @@ class ano extends Model
         return $this->belongsTo(activiteBudgetAnnuel::class, 'activite_budget_annuel_id');
     }
 
+    public function programme() : BelongsTo {
+        return $this->belongsTo(programme::class, 'programme_id');
+    }
+
 }

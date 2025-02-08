@@ -15,20 +15,9 @@ class AnoController extends Controller
 {
     public function insertAno(Request $request){
 
-        $request->validate([
-            'documents' => 'required|',
-            'documents.*' => 'file|mimes:pdf|max:10240',
-            'titres' => 'required',
-            'date_debut' => 'required',
-            'date_fin' => 'required',
-            'libelle' => 'required',
-            'budget' => 'required',
-            'email' => 'required',
-            'responsable' => 'required',
-            'evenement' => 'required',
-        ]);
 
-        
+        // dd($request->all());
+
         //$activite = activiteBudgetAnnuel::find($request->activite_id)->first();
         $ano = ano::create([
             'libelle'=> $request->libelle,
@@ -38,6 +27,10 @@ class AnoController extends Controller
 
         if($request->input('activite_id')){
             $ano->activite_budget_annuel_id = $request->activite_id;
+            $ano->save();
+        }
+        if($request->input('programme_id')){
+            $ano->programme_id = $request->programme_id;
             $ano->save();
         }
 
@@ -50,9 +43,9 @@ class AnoController extends Controller
         $titres = $request->input('titres');
 
         if($evenements){
-            
+
             for ($i = 0; $i < count($evenements); $i++) {
-                
+
                 $event = $evenements[$i];
                 $date_d = $date_debut[$i];
                 $date_f = $date_fin[$i];
@@ -62,43 +55,39 @@ class AnoController extends Controller
                     'date_debut' => $date_d,
                     'date_fin' => $date_f,
                 ]);
-                
+
                 $newEvent->ano_id = $ano->id;
                 $newEvent->activite_budget_annuel_id = $request->activite_id;
                 $newEvent->save();
             }
         }
 
-        if($emails){
-            for($i = 0; $i < count($emails); $i++){
-                $user = User::where('email', $emails[$i])->first();
-                $user->anos()->attach($ano->id, ['role'=> 'Responsable']);
+        if ($emails) {
+            for ($i = 0; $i < count($emails); $i++) {
+                $user = User::firstOrCreate(['email' => $emails[$i]], [
+                    'name' => 'Nom par défaut', // Remplacez par une logique appropriée
+                    'password' => bcrypt('cgp@2024'), // Définissez un mot de passe par défaut
+                ]);
+
+                $user->anos()->attach($ano->id, ['role' => 'Responsable']);
             }
         }
 
-        //dd($documents);
-        //return response()->json($documents);
+
         if ($request->hasFile('documents')) {
-            //return response()->json($documents);
-            foreach($request->file('documents') as $index => $file){
+            foreach ($request->file('documents') as $index => $file) {
+                $destinationPath = 'assets/documents';
+                $filename = uniqid() . '_' . $file->getClientOriginalName();
+                $filePath = $file->move(public_path($destinationPath), $filename);
+                $fileUrl = asset('https://cgpgabon24.alwaysdata.net/api-eano/public/assets/documents/' . $filename);
 
-                $destinationPath = 'assets/documents';  // Chemin dans le répertoire public
+                $titre = $titres[$index];
 
-                // Sauvegarder le fichier dans le répertoire public/assets/documents avec le nom original
-                $filePath = $file->move(public_path($destinationPath), $file->getClientOriginalName());
-    
-                // Récupérer le nom du fichier
-                $filename = $file->getClientOriginalName();
-                
-                // Utiliser la fonction asset() pour générer l'URL publique du fichier
-                $fileUrl = asset('assets/documents/' . $filename);
-    
-                // Enregistrer les informations du document dans la base de données
-                $document = new documentAno();
-                $document->titre = $titres[$index];
-                $document->file_name = $filename;
-                $document->file_path = $destinationPath . '/' . $filename;
-                $document->file_url = $fileUrl;  // URL générée avec asset()
+                $document = new DocumentAno();
+                $document->titre = $titre;
+                $document->file_name =  $filename;
+                $document->file_path =  $destinationPath . '/' . $filename;
+                $document->file_url = $fileUrl;
                 $document->ano_id = $ano->id;
                 $document->save();
             }
@@ -112,15 +101,15 @@ class AnoController extends Controller
             'message' => 'ano non enregistrer !'
         ], 400);
 
-    }
+     }
 
     public function ano () {
-        $ano = ano::with('evenements.users')->get();
+        $ano = ano::with('evenements.user','documents','users')->get();
         return response()->json($ano);
     }
 
     public function selectEditAno ($id){
-        $ano = ano::with('documents', 'evenements.users', 'users')->find($id);
+        $ano = ano::with('documents', 'evenements.user', 'users')->find($id);
         return response()->json($ano);
     }
 
@@ -144,9 +133,9 @@ class AnoController extends Controller
         $titres = $request->input('titres');
 
         if($evenements){
-            
+
             for ($i = 0; $i < count($evenements); $i++) {
-                
+
                 $event = $evenements[$i];
                 $date_d = $date_debut[$i];
                 $date_f = $date_fin[$i];
@@ -160,7 +149,7 @@ class AnoController extends Controller
                     $lastevent->libelle = $event;
                     $lastevent->date_fin = $date_f;
                     $lastevent->date_debut = $date_d;
-                    
+
                     $lastevent->ano_id = $ano->id;
                     $lastevent->activite_budget_annuel_id = $request->activite_id;
                     $lastevent->save();
@@ -194,10 +183,10 @@ class AnoController extends Controller
 
                 // Sauvegarder le fichier dans le répertoire public/assets/documents avec le nom original
                 $filePath = $file->move(public_path($destinationPath), $file->getClientOriginalName());
-        
+
                 // Récupérer le nom du fichier
                 $filename = $file->getClientOriginalName();
-                
+
                 // Utiliser la fonction asset() pour générer l'URL publique du fichier
                 $fileUrl = asset('assets/documents/' . $filename);
 
@@ -246,17 +235,16 @@ class AnoController extends Controller
 
     public function anoProgramme($id){
         $ano = programme::with(
-            'budgetannuels.composants.souscomposants.activitesbudgetannuel.anos.evenements',
-        'budgetannuels.composants.souscomposants.activitesbudgetannuel.anos.users')
-        ->find($id)
-        ->budgetannuels
-        ->flatMap(function($budgetannuels) {
-            return $budgetannuels->composants->flatMap(function($composants) {
-                return $composants->souscomposants->flatMap(function($souscomposants) {
-                    return $souscomposants->activitesbudgetannuel;
-                });
-            });
-        });
+            'anos.evenements','anos.documents')
+        ->find($id);
+    // ->budgetannuels
+    // ->flatMap(function($budgetannuels) {
+    //     return $budgetannuels->composants->flatMap(function($composants) {
+    //         return $composants->souscomposants->flatMap(function($souscomposants) {
+    //             return $souscomposants->activitesbudgetannuel;
+    //         });
+    //     });
+    // });
 
         return response()->json($ano);
     }
@@ -271,7 +259,7 @@ class AnoController extends Controller
     }
 
     public function etudeAno($id, Request $request){
-        
+
         $request->validate([
             'budget_cntippee' => 'required',
             'situation_actuelle'=> 'required',
@@ -287,7 +275,7 @@ class AnoController extends Controller
         $ano->commentaire = $request->commentaire;
         $ano->statut = 'En traitement';
         $ano->save();
-        
+
         return response()->json($ano);
     }
 
@@ -298,7 +286,7 @@ class AnoController extends Controller
     }
 
     public function anoActivite ($id) {
-        $activite = activiteBudgetAnnuel::with('anos.evenements.users')->find($id);
+        $activite = activiteBudgetAnnuel::with('anos.evenements.user')->find($id);
         return response()->json($activite->anos);
     }
 

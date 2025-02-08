@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 class FactureController extends Controller
 {
     public function factures( ) {
-        $factures = facture::with('ano', 'contract')->get();
+        $factures = facture::with('ano', 'contract','documents')->get();
         return response()->json($factures);
     }
 
@@ -21,7 +21,7 @@ class FactureController extends Controller
 
         //dd($request->hasFile('documents'));
 
-        $request->validate([            
+        $request->validate([
             'documents' => 'required|',
             'documents.*' => 'file|mimes:pdf|max:10240',
             'titres' => 'required',
@@ -60,29 +60,23 @@ class FactureController extends Controller
 
         $titres = $request->input('titres');
 
-        if ($request->hasFile('documents')) {
-            //return response()->json($documents);
-            foreach($request->file('documents') as $index => $file){
-                $destinationPath = 'assets/documents';  // Chemin dans le répertoire public
+                if ($request->hasFile('documents')) {
+                foreach ($request->file('documents') as $index => $file) {
+                    $destinationPath = 'assets/documents';
+                    $filename = uniqid() . '_' . $file->getClientOriginalName();
+                    $filePath = $file->move(public_path($destinationPath), $filename);
+                    $fileUrl = asset('https://cgpgabon24.alwaysdata.net/api-eano/public/assets/documents/' . $filename);
 
-                // Sauvegarder le fichier dans le répertoire public/assets/documents avec le nom original
-                $filePath = $file->move(public_path($destinationPath), $file->getClientOriginalName());
-    
-                // Récupérer le nom du fichier
-                $filename = $file->getClientOriginalName();
-                
-                // Utiliser la fonction asset() pour générer l'URL publique du fichier
-                $fileUrl = asset('assets/documents/' . $filename);
-    
-                // Enregistrer les informations du document dans la base de données
-                $document = new documentFacture();
-                $document->titre = $titres[$index];
-                $document->file_name = $filename;
-                $document->file_path = $destinationPath . '/' . $filename;
-                $document->file_url = $fileUrl;  // URL générée avec asset()
-                $document->facture_id = $facture->id;
-                $document->save();
-            }
+                    $titre = $titres[$index];
+
+                    $document =new documentFacture();
+                    $document->titre = $titre;
+                    $document->file_name =  $filename;
+                    $document->file_path =  $destinationPath . '/'. $filename;
+                    $document->file_url = $fileUrl;
+                    $document->facture_id = $facture->id;
+                    $document->save();
+                }
 
             return response()->json([
                 'message' => 'facture enregistrer !'
@@ -144,6 +138,4 @@ class FactureController extends Controller
             'message' => 'Facture traitée avec succès',
         ]);
     }
-
-
 }

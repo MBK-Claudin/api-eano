@@ -20,7 +20,16 @@ class evenement extends Model
         return $this->belongsTo(ano::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function activites () : BelongsTo {
         return $this->belongsTo(activiteBudgetAnnuel::class);
+    }
+
+    public function programme(){
+        return $this->belongsTo(programme::class);
     }
 }

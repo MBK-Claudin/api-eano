@@ -15,4 +15,7 @@ class documentContract extends Model
         'file_path',
         'file_url',
     ];
+    public function contacts () : HasMany {
+        return $this->hasMany(contract::class);
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -48,7 +47,19 @@ class programme extends Model
     public function livrables(){
         return $this->hasMany(livrable::class);
     }
-    public function contracts(){
-        return $this->hasMany(contract::class);
+ 
+
+    public function anos(){
+        return $this->hasMany(ano::class);
     }
+
+    public function evenements(){
+        return $this->hasMany(evenement::class);
+    }
+
+    public function contracts()
+{
+    return $this->hasMany(Contract::class, 'programme_id');
+}
+
 }

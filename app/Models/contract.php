@@ -30,8 +30,18 @@ class contract extends Model
     }
 
     public function programme()
-{
+    {
     return $this->belongsTo(Programme::class);
-}
+    }
+
+    public function documentContrats(){
+    return $this->hasMany(documentContract::class, 'contract_id');}
+
 
 }
+
+
+
+
+
+

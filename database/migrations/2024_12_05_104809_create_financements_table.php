@@ -17,9 +17,9 @@ return new class extends Migration
         Schema::create('financements', function (Blueprint $table) {
             $table->id();
             $table->string('type_financement');
-            $table->string('montant');
+            $table->decimal('montant');
             $table->string('principale');
-            $table->string('montant_usd');
+            $table->decimal('montant_usd');
             $table->string('statut');
             $table->foreignId('budgetAnnuel_id')->constrained('budget_annuels')->onDelete('cascade');
             $table->foreignId('organisation_id')->constrained('organisations')->onDelete('cascade');

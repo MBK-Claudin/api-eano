@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\ActiviteController;
 use App\Http\Controllers\AnoController;
 use App\Http\Controllers\auth\authAzureController;
@@ -15,7 +14,6 @@ use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\FinancementController;
 use App\Http\Controllers\siteController;
 use App\Http\Controllers\MissionController;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -91,7 +89,7 @@ Route::delete('budgetannuel/delete/activite/{id}', [budgetAnnuelController::clas
 Route::get('all/budgetannuels', [budgetAnnuelController::class, 'allBudget']);
 
 Route::post('insert/ano', [AnoController::class, 'insertAno']);
-Route::get('ano', [AnoController::class, 'ano']);
+Route::get('get/ano', [AnoController::class, 'ano']);
 Route::get('select/edit/ano/{id}', [AnoController::class, 'selectEditAno']);
 Route::post('edit/ano', [AnoController::class, 'editAno']);
 Route::delete('delete/ano/{id}', [AnoController::class, 'deleteANO']);
@@ -112,9 +110,8 @@ Route::get('activite/activitebudgetannuel/{id}', [ActiviteController::class, 'ja
 // Routes livrable
 Route::post('insert/livrable', [livrableController::class, 'insertLivrable']);
 Route::get('livrable/{id}', [livrableController::class, 'livrable']);
-Route::get('livrable/delete/{id}', [livrableController::class, 'deleteLivrable']);
-Route::get('livrable/update/{id}', [livrableController::class, 'updateLivrable']);
-
+Route::delete('livrable/delete/{id}', [livrableController::class, 'deleteLivrable']);
+Route::put('livrable/update/{id}', [livrableController::class, 'updateLivrable']);
 
 // Routes pour les contracts
 Route::get('contracts/{id}', [ContractController::class, 'contracts']);
@@ -136,16 +133,15 @@ Route::get('impacts/{programme_id}', [ImpactController::class, 'index']);
 Route::post('impacts/insert', [ImpactController::class, 'store']);
 Route::put('impacts/update/{id}', [ImpactController::class, 'update']);
 Route::delete('impact/delete/{id}', [ImpactController::class, 'destroy']);
+Route::get('impacts/show/{id}', [ImpactController::class, 'show']);
 
 
 //Route pour les missions
-
     Route::get('mission/{programme_id}', [MissionController::class, 'getMission']);
     Route::get('mission/show/{id}', [MissionController::class, 'show']);
     Route::post('mission/insert', [MissionController::class, 'store']);
     Route::put('mission/update/{id}', [MissionController::class, 'update']);
     Route::delete('mission/delete/{id}', [MissionController::class, 'destroy']);
-
 
 //route pour le financement
 Route::get('financement/{programme_id}', [FinancementController::class, 'index']);
@@ -153,5 +149,3 @@ Route::post('/financement/insert', [FinancementController::class, 'store']);
 Route::get('financement/show/{id}', [FinancementController::class, 'show']);
 Route::put('financement/update/{id}', [FinancementController::class, 'update']);
 Route::delete('financement/delete/{id}', [FinancementController::class, 'destroy']);
-
-

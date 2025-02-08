@@ -14,6 +14,7 @@ class budgetAnnuel extends Model
         'periode',
         'date_debut',
         'date_fin',
+        'statut',
         'Budget_planifier',
         'Budget_executer',
         'file_name',

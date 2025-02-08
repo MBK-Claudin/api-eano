@@ -35,20 +35,19 @@ class ActiviteController extends Controller
         $activites->activite_budget_annuel_id = $request->activite_id;
         $activites->phase_id = $request->phase;
         $activites->save();
-        
+
         $site = site::where('id', $request->site)->first();
 
         $activites->sites()->attach($site->id);
 
-
         $user = User::where('email', $request->email)->first();
         $user->activites()->attach($activites->id, ['role' => 'Responsable']);
-        
+
 
         return response()->json([
             "message" => "création de l'activité ok !"
         ],);
-        
+
     }
 
     public function getPhase (){

@@ -21,15 +21,19 @@ class ImpactController extends Controller
         // Transformer les données pour les retourner sous un format spécifique
         $impactData = $impact->map(function ($impact) {
             return [
-            'programme_id' => $impact->programme_id,
-            'id' => $impact->id,
-            'type_impact' => $impact->type_impact,
-            'libelle_impact' => $impact->libelle_impact,
-            'force' => $impact->force,
-            'site' => $impact->site_id ? $impact->site->libelle : null,
-            'taille' => $impact->taille,
-            'mitigation' => $impact->mitigation,
-            'activite' => $impact->activite_id ? $impact->activite->libelle : null
+                'programme_id' => $impact->programme_id,
+                'id' => $impact->id,
+                'type_impact' => $impact->type_impact,
+                'libelle_impact' => $impact->libelle_impact,
+                'force' => $impact->force,
+                'site' => $impact->site_id ? $impact->site : null,
+                'taille' => $impact->taille,
+                'mitigation' => $impact->mitigation,
+                'activite' => $impact->activite_id ? $impact->activite : null,
+                'created_at' => $impact->created_at,
+                'updated_at' => $impact->updated_at,
+
+
         ];
     });
         return response()->json($impactData);
@@ -69,29 +73,18 @@ class ImpactController extends Controller
             'type_impact' => $impact->type_impact,
             'libelle_impact' => $impact->libelle_impact,
             'force' => $impact->force,
-            'site' => $impact->site_id ? $impact->site->libelle : null,
+            'site' => $impact->site_id ? $impact->site : null,
             'taille' => $impact->taille,
             'mitigation' => $impact->mitigation,
-            'activite' => $impact->activite_id ? $impact->activite->libelle : null,
+            'activite' => $impact->activite_id ? $impact->activite : null,
             'created_at' => $impact->created_at,
             'updated_at' => $impact->updated_at,
+
         ]);
     }
     // Mettre à jour un impact
     public function update(Request $request, $id)
     {
-        // Valider les données reçues
-        $validatedData = $request->validate([
-            'type_impact' => 'required|string',
-            'libelle_impact' => 'required|string',
-            'force' => 'required|string',
-            'site_id' => 'required|exists:sites,id',
-            'taille' => 'required|string',
-            'mitigation' => 'required|string',
-            'programme_id' => 'required|exists:programmes,id',
-            'activite_id' => 'required|exists:activites,id',
-        ]);
-
         // Trouver l'impact à mettre à jour
         $impact = Impact::find($id);
 
@@ -99,15 +92,27 @@ class ImpactController extends Controller
             return response()->json(['message' => 'Impact non trouvé'], 404);
         }
 
-        // Mettre à jour les données de l'impact
-        $impact->update($validatedData);
+        // Récupérer uniquement les champs envoyés dans la requête
+        $impact->fill($request->only([
+            'type_impact',
+            'libelle_impact',
+            'force',
+            'site_id',
+            'taille',
+            'mitigation',
+            'programme_id',
+            'activite_id',
+        ]));
 
-        // Retourner la réponse avec l'impact mis à jour
+        // Sauvegarder les modifications
+        $impact->save();
+
         return response()->json([
             'message' => 'Impact mis à jour avec succès',
             'data' => $impact,
         ]);
     }
+
 
     // Supprimer un impact
     public function destroy($id)

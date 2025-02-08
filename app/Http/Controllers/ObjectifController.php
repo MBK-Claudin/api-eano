@@ -14,7 +14,7 @@ class ObjectifController extends Controller
         $programme = objectif::with("programmes")->findOrFail($id);
         return response()->json($programme->programmes);
     }
-    
+
     public function objectifs (){
         $objectifs = objectif::with('organisations', 'users')->get();
         return response()->json($objectifs);
@@ -25,6 +25,7 @@ class ObjectifController extends Controller
         $objectif = Objectif::create([
             'secteur' => $request->secteur,
             'objectif' => $request->objectif,
+            'description'=> $request->description,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
         ]);
@@ -33,6 +34,8 @@ class ObjectifController extends Controller
         $ancrages = $request->input('ancrage');
         $responsables = $request->input('responsable');
         $emails = $request->input('email');
+        $roles = $request->input('roles');
+
 
         //dd($organisations, $ancrages);
 
@@ -40,9 +43,9 @@ class ObjectifController extends Controller
             for($i = 0; $i < count($organisations); $i++){
                 $organisation = $organisations[$i];
                 $ancrage = $ancrages[$i];
-    
+
                 $isOrganisation = organisation::where('libelle', $organisation)->first();
-    
+
                 if($isOrganisation){
                     $objectif->organisations()->attach($isOrganisation->id, ['ancrage' => $ancrage]);
                 }else{
@@ -58,18 +61,19 @@ class ObjectifController extends Controller
             for($i = 0; $i < count($responsables); $i++){
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
-    
+                $role = $roles[$i];
+
                 $user = User::where('name', $responsable)->first();
-    
+
                 if($user){
-                    $user->objectifs()->attach($objectif->id, ['role' => 'responsable']);
+                    $user->objectifs()->attach($objectif->id, ['role' => $role]);
                 }else{
                     $user = User::create([
                         'name' => $responsable,
                         'email' => $email,
                     ]);
-    
-                    $user->objectifs()->attach($objectif->id, ['role' => 'responsable']);
+
+                    $user->objectifs()->attach($objectif->id, ['role' => $role]);
                 }
             }
         }
@@ -92,12 +96,15 @@ class ObjectifController extends Controller
         $objectif->save();
 
         $objectif->organisations()->detach();
-        $objectif->users()->detach();  
+        $objectif->users()->detach();
 
         $organisations = $request->input('organisation');
         $ancrages = $request->input('ancrage');
         $responsables = $request->input('responsable');
         $emails = $request->input('email');
+        $roles = $request->input('roles');
+
+
 
         //dd($organisations, $ancrages);
 
@@ -105,16 +112,16 @@ class ObjectifController extends Controller
             for($i = 0; $i < count($organisations); $i++){
                 $organisation = $organisations[$i];
                 $ancrage = $ancrages[$i];
-    
+
                 $isOrganisation = Organisation::where('libelle', $organisation)->first();
-    
+
                 if($isOrganisation){
                     $objectif->organisations()->attach($isOrganisation->id, ['ancrage' => $ancrage]);
                 }else{
                     $organisation = Organisation::create([
                         'libelle' => $organisation,
                     ]);
-    
+
                     $objectif->organisations()->attach($organisation->id, ['ancrage' => $ancrage]);
                 }
             }
@@ -124,18 +131,20 @@ class ObjectifController extends Controller
             for($i = 0; $i < count($responsables); $i++){
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
-    
+                $role = $roles[$i];
+
+
                 $user = User::where('name', $responsable)->first();
-    
+
                 if($user){
-                    $user->objectifs()->attach($objectif->id, ['role' => 'responsable']);
+                    $user->objectifs()->attach($objectif->id, ['role' => $role]);
                 }else{
                     $user = User::create([
                         'name' => $responsable,
                         'email' => $email,
                     ]);
-    
-                    $user->objectifs()->attach($objectif->id, ['role' => 'responsable']);
+
+                    $user->objectifs()->attach($objectif->id, ['role' => $role]);
                 }
             }
         }

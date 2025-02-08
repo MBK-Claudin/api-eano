@@ -29,6 +29,7 @@ class budgetAnnuelController extends Controller
             'periode' => $request->periode,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
+            'statut'=> $request->statut,
             'file_name' => $document->getClientOriginalName(),
             'file_path' => $filePath,
             'file_url' => $fileUrl,

@@ -56,7 +56,7 @@ class budgetAnnuelImport implements ToArray, WithHeadingRow
                 $souscomposant->composant_id = $composant->id;
                 $souscomposant->save();
             }
-    
+
             // Créer l'activité si elle est présente
             if (!empty($data['activites'])) {
                 $budget_fcfa = $data['budget_us'] * 600;
@@ -97,9 +97,8 @@ class budgetAnnuelImport implements ToArray, WithHeadingRow
     private function transformExcelDate($excelDate)
     {
         if (is_numeric($excelDate)) {
-            // Convertir la date Excel en date réelle en ajoutant le nombre de jours à 1900-01-01
             return Carbon::createFromDate(1900, 1, 1)->addDays($excelDate - 2)->format('Y-m-d');
         }
-        return null; // Gérer les valeurs non valides si besoin
+        return null;
     }
 }

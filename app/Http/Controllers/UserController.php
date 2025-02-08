@@ -11,6 +11,9 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+
 
 class UserController extends Controller
 {
@@ -34,7 +37,9 @@ class UserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email
+            'email' => $request->email,
+            'password' => Hash::make('CGP@2024'),
+
         ]);
 
         if ($request->hasFile('photo')) {
@@ -192,21 +197,38 @@ class UserController extends Controller
             return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 400);
         }
 
-        // Trouver l'utilisateur
-        $user = User::where('email', $request->email)->first();
+        // Vérifier les identifiants
+        $credentials = $request->only('email', 'password');
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['message' => 'Email or password is incorrect'], 401);
         }
 
-        // Retourner le rôle de l'utilisateur
+        // Récupérer l'utilisateur
+        $user = auth()->user();
+
+        // Vérifier si le token est déjà présent dans la colonne azure_token
+        if (!$user->azure_id) {
+            // Si le token n'existe pas, on l'enregistre
+            $user->azure_id = $token;
+            $user->save();
+        }
+
+        // Charger les rôles de l'utilisateur
+        $userWithRoles = $user->load('roles');
+
         return response()->json([
             'message' => 'Login successful',
-            'photo'=> $user->photo_url,
-            'email'=> $user->email,
-            'role' => $user->role->name,
+            'token' => $token,
+            'user' => [
+                'id'=> $userWithRoles->id,
+                'photo_url' => $userWithRoles->photo_url,
+                'name' => $userWithRoles->email,
+                // 'role' => $userWithRoles->roles->pluck('nomrole'),
+            ]
         ]);
     }
+
 
 
 
@@ -234,7 +256,8 @@ public function addOrCreateContributeurToProgramme(Request $request)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt('defaultpassword123'),
+            'password' => Hash::make('CGP@2024'),
+
         ]);
     }
 
@@ -259,6 +282,10 @@ public function addOrCreateContributeurToProgramme(Request $request)
         'role' => $request->role,
     ], 201);
 }
+
+
+
+
 
 
 public function removeContributeurFromProgramme($programme_id, $user_id)
@@ -293,6 +320,7 @@ public function removeContributeurFromProgramme($programme_id, $user_id)
         'user_id' => $user_id,
     ], 200);
 }
+
 
 
 }

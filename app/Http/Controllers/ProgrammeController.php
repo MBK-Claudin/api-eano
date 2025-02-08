@@ -17,6 +17,8 @@ class ProgrammeController extends Controller
         return response()->json($programmes);
     }
 
+
+
     public function insertProgramme(Request $request){
         $objectif = objectif::where('id', $request->objectif_id)->first();
 
@@ -25,7 +27,9 @@ class ProgrammeController extends Controller
             'objectif_specifique' => $request->objectif_specifique,
             'date_debut' => $request->date_debut,
             'date_fin' => $request->date_fin,
-            'description_objectif_specifique' => $request->input('description_objectif_specifique') // correction ici
+            'description_objectif_specifique' => $request->input('description_objectif_specifique'),
+            'Budget_planifier_fcfa' => $request->Budget_planifier_fcfa,
+            'Budget_planifier_us' => $request->Budget_planifier_us
         ]);
 
         $objectif->programmes()->save($programme);
@@ -34,6 +38,7 @@ class ProgrammeController extends Controller
         $ancrages = $request->input('ancrage');
         $responsables = $request->input('responsable');
         $emails = $request->input('email');
+        $roles = $request->input('roles');
 
         //dd($organisations, $ancrages);
 
@@ -60,11 +65,12 @@ class ProgrammeController extends Controller
             for($i = 0; $i < count($responsables); $i++){
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
+                $role = $roles[$i];
 
                 $user = User::where('email', $email)->first();
 
                 if($user){
-                    $user->programmes()->attach($programme->id, ['role' => 'responsable']);
+                    $user->programmes()->attach($programme->id, ['role' => $role]);
                 }else{
                     $photo = asset('assets/images/profile/default_user.png');
                     $user = User::create([
@@ -73,7 +79,7 @@ class ProgrammeController extends Controller
                         'photo_url' => $photo,
                     ]);
 
-                    $user->programmes()->attach($programme->id, ['role' => 'responsable']);
+                    $user->programmes()->attach($programme->id, ['role' => $role]);
                 }
             }
         }
@@ -110,6 +116,7 @@ class ProgrammeController extends Controller
         $responsables = $request->input('responsable');
         $emails = $request->input('email');
 
+
         //dd($organisations, $ancrages);
 
         if($organisations){
@@ -139,14 +146,14 @@ class ProgrammeController extends Controller
                 $user = User::where('name', $responsable)->first();
 
                 if($user){
-                    $user->programmes()->attach($programme->id, ['role' => 'responsable']);
+                    $user->programmes()->attach($programme->id, ['role' => $responsable]);
                 }else{
                     $user = User::create([
                         'name' => $responsable,
                         'email' => $email,
                     ]);
 
-                    $user->programmes()->attach($programme->id, ['role' => 'responsable']);
+                    $user->programmes()->attach($programme->id, ['role' => $responsable]);
                 }
             }
         }

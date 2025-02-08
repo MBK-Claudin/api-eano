@@ -13,16 +13,16 @@ class authAzureController extends Controller
     public function login(){
 
         $scopes = [
-            'User.Read', 
-            'openid', 'profile', 
-            'email', 
+            'User.Read',
+            'openid', 'profile',
+            'email',
             'offline_access',
         ];
         //dd( Socialite::with('azure')->scopes($scopes)->redirect());
 
         return Socialite::with('azure')->scopes($scopes)->redirect();
     }
-    
+
     public function callback(){
 
         $azureUser = Socialite::with('azure')->stateless()->user();
@@ -50,7 +50,7 @@ class authAzureController extends Controller
         return redirect('http://localhost:4200/login/check?token='. urlencode($token) . '&auth=' . urlencode($user->azure_id));
 
     }
-
+    
     public function logout (Request $request) {
         Auth::logout();
         $request->user()->tokens()->delete();
@@ -63,5 +63,5 @@ class authAzureController extends Controller
         $user = User::where('azure_id', $id)->first();
         return response()->json(['user' => $user]);
     }
-    
+
 }
