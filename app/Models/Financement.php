@@ -14,6 +14,7 @@ protected $fillable = [
     'principale',
     'budgetAnnuel',
     'montant_usd',
+    'statut',
     'organisation_id',
     'programme_id'
 
@@ -31,7 +32,7 @@ public function organisation()
 
 public function programme()
 {
-    return $this->belongsTo(Programme::class); // Financement appartient à Programme
+    return $this->belongsTo(programme::class); // Financement appartient à Programme
 }
 
 public function budgetAnnuel()

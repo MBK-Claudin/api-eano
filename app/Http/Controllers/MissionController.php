@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\mission;
+use App\Models\enquete;
+
 use Illuminate\Http\Request;
 
 class MissionController extends Controller
@@ -28,7 +30,7 @@ class MissionController extends Controller
             'date_debut' => $mission->date_debut,
             'statut' => $mission->statut,
             'site' => $mission->site_id ? $mission->site->libelle : null,
-            'activite' => $impact->activite_id ? $impact->activite->libelle : null,
+            'activite' => $mission->activite_id ? $mission->activite->libelle : null,
             'responsable' => $mission->user_id ? $mission->user->name : null,
 
         ];
@@ -119,4 +121,66 @@ class MissionController extends Controller
         // Retourner une réponse indiquant que la suppression a réussi
         return response()->json(['message' => 'Impact supprimé avec succès'], 200);
     }
+
+    public function enquete(Request $request)
+    {
+        // dd( $request->all());
+
+        $missionId = $request->input('mission_id');
+        $file = $request->file('csv_file');
+
+        if (($handle = fopen($file, "r")) !== false) {
+            $header = fgetcsv($handle, 1000, ","); // Lire l'en-tête du fichier CSV
+
+            while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                // Déboguer les données pour vérifier leur contenu
+                // dd($data);
+
+                // Nettoyer les données avec mb_convert_encoding pour gérer l'encodage
+                $intituleProjet = isset($data[2]) ? mb_convert_encoding($data[2], 'UTF-8', 'auto') : null;
+                $ministere = isset($data[3]) ? mb_convert_encoding($data[3], 'UTF-8', 'auto') : null;
+                $gabonProvince = isset($data[4]) ? mb_convert_encoding($data[4], 'UTF-8', 'auto') : null;
+                $gabonDepartement = isset($data[5]) ? mb_convert_encoding($data[5], 'UTF-8', 'auto') : null;
+                $gabonAdm3 = isset($data[6]) ? mb_convert_encoding($data[6], 'UTF-8', 'auto') : null;
+                $observations = isset($data[7]) ? mb_convert_encoding($data[7], 'UTF-8', 'auto') : null;
+
+                // Convertir latitude et longitude en nombres (float)
+                $latitude = isset($data[9]) && is_numeric($data[9]) ? (float)$data[9] : null;
+                $longitude = isset($data[10]) && is_numeric($data[10]) ? (float)$data[10] : null;
+
+                // Assurez-vous que les dates sont au bon format
+                $dateDebut = isset($data[14]) ? \DateTime::createFromFormat('d/m/Y', $data[14]) : null;
+                $dateFin = isset($data[15]) ? \DateTime::createFromFormat('d/m/Y', $data[15]) : null;
+
+                // Vérifier que le cout_initial est un nombre valide
+                $coutInitial = isset($data[13]) && is_numeric($data[13]) ? (float)$data[13] : null;
+
+                enquete::create([
+                    'mission_id' => $missionId,
+                    'intitule_projet' => $intituleProjet,
+                    'ministere' => $ministere,
+                    'gabon_province' => $gabonProvince,
+                    'gabon_departement' => $gabonDepartement,
+                    'gabon_adm3' => $gabonAdm3,
+                    'observations' => $observations,
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                    'altitude' => isset($data[11]) ? $data[11] : null, // Assurez-vous que l'altitude est correcte
+                    'precision' => isset($data[12]) ? $data[12] : null,
+                    'cout_initial' => $coutInitial,
+                    'date_debut' => $dateDebut ? $dateDebut->format('Y-m-d') : null,
+                    'date_fin' => $dateFin ? $dateFin->format('Y-m-d') : null,
+                    'photo_url' => isset($data[55]) ? $data[55] : null,
+                    'video_url' => isset($data[57]) ? $data[57] : null
+                ]);
+            }
+
+            fclose($handle);
+        }
+
+        return response()->json(['message' => 'Données importées avec succès'], 200);
+    }
+
+
+
 }

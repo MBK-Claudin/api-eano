@@ -46,4 +46,9 @@ class mission extends Model
         return $this->belongsTo(activite::class);
     }
 
+    public function collects()
+    {
+        return $this->hasMany(Collect::class);
+    }
+
 }

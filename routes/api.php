@@ -14,6 +14,8 @@ use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\FinancementController;
 use App\Http\Controllers\siteController;
 use App\Http\Controllers\MissionController;
+use App\Http\Controllers\CollectController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -142,6 +144,9 @@ Route::get('impacts/show/{id}', [ImpactController::class, 'show']);
     Route::post('mission/insert', [MissionController::class, 'store']);
     Route::put('mission/update/{id}', [MissionController::class, 'update']);
     Route::delete('mission/delete/{id}', [MissionController::class, 'destroy']);
+    Route::post('collect/requete', [CollectController::class, 'import']);
+    Route::get('collect/visuel/{id}', [CollectController::class, 'index']);
+
 
 //route pour le financement
 Route::get('financement/{programme_id}', [FinancementController::class, 'index']);
@@ -149,3 +154,4 @@ Route::post('/financement/insert', [FinancementController::class, 'store']);
 Route::get('financement/show/{id}', [FinancementController::class, 'show']);
 Route::put('financement/update/{id}', [FinancementController::class, 'update']);
 Route::delete('financement/delete/{id}', [FinancementController::class, 'destroy']);
+

@@ -93,6 +93,7 @@ class ObjectifController extends Controller
         $objectif->objectif = $request->objectif;
         $objectif->date_debut = $request->date_debut;
         $objectif->date_fin = $request->date_fin;
+        $objectif->description = $request->description;
         $objectif->save();
 
         $objectif->organisations()->detach();

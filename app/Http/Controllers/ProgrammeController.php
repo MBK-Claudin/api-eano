@@ -115,6 +115,8 @@ class ProgrammeController extends Controller
         $ancrages = $request->input('ancrage');
         $responsables = $request->input('responsable');
         $emails = $request->input('email');
+        $roles = $request->input('roles', []);
+
 
 
         //dd($organisations, $ancrages);
@@ -142,18 +144,20 @@ class ProgrammeController extends Controller
             for($i = 0; $i < count($responsables); $i++){
                 $responsable = $responsables[$i];
                 $email = $emails[$i];
+                $role = $roles[$i];
+
 
                 $user = User::where('name', $responsable)->first();
 
                 if($user){
-                    $user->programmes()->attach($programme->id, ['role' => $responsable]);
+                    $user->programmes()->attach($programme->id, ['role' => $role]);
                 }else{
                     $user = User::create([
                         'name' => $responsable,
                         'email' => $email,
                     ]);
 
-                    $user->programmes()->attach($programme->id, ['role' => $responsable]);
+                    $user->programmes()->attach($programme->id, ['role' => $role]);
                 }
             }
         }

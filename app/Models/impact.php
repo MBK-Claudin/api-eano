@@ -25,12 +25,12 @@ protected $fillable=[
 
     public function programme()
     {
-        return $this->belongsTo(Programme::class);
+        return $this->belongsTo(programme::class);
     }
 
     public function site()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsTo(site::class);
     }
 
     public function activite()

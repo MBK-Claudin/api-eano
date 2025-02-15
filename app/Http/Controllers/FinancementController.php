@@ -43,20 +43,29 @@ class FinancementController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'type_financement' => 'required|string',
+            'montant' => 'required|numeric',
+            'principale' => 'required|string',
+            'montant_usd' => 'required|numeric',
+            'partenaire' => 'required|integer',
+            'statut' => 'required|string',
+            'programme_id' => 'required|integer',
+        ]);
+
         $financement = Financement::create([
-            'type_financement' => $request->type_financement,
-            'montant' => $request->montant,
-            'principale' => $request->principale,
-            'montant_usd' => $request->montant_usd,
-            'budgetAnnuel_id'=> $request->budgetAnnuel_id,
-            'organisation_id'=> $request->partenaire,
-            'statut' => $request->statut,
-            'programme_id' => $request->programme_id,
+            'type_financement' => $validatedData['type_financement'],
+            'montant' => $validatedData['montant'],
+            'principale' => $validatedData['principale'],
+            'montant_usd' => $validatedData['montant_usd'],
+            'organisation_id' => $validatedData['partenaire'],
+            'statut' => $validatedData['statut'],
+            'programme_id' => $validatedData['programme_id'],
         ]);
 
         return response()->json([
             'message' => 'Financement créé avec succès',
-            
+            'data' => $financement
         ], 201);
     }
 

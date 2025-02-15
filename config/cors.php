@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],  // Autorise toutes les méthodes HTTP (GET, POST, PUT, DELETE, etc.)
 
-    'allowed_origins' => ['http://localhost:4200'],  // Autorise l'origine de votre application Angular
+    'allowed_origins' => ['http://localhost:4200','https://test25.alwaysdata.net'],  // Autorise l'origine de votre application Angular
 
     'allowed_origins_patterns' => [],  // Vous pouvez utiliser des expressions régulières si nécessaire
 
