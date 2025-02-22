@@ -71,4 +71,6 @@ class ActiviteController extends Controller
         return response()->json($activite->activites);
     }
 
+
+  
 }

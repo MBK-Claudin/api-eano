@@ -101,9 +101,12 @@ class AnoController extends Controller
             'message' => 'ano non enregistrer !'
         ], 400);
 
-     }
+    }
 
-    public function ano () {
+
+
+
+     public function ano () {
         $ano = ano::with('evenements.user','documents','users')->get();
         return response()->json($ano);
     }

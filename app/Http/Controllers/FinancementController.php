@@ -43,31 +43,33 @@ class FinancementController extends Controller
      */
     public function store(Request $request)
     {
+        // Étape 1 : Valider les données du formulaire
         $validatedData = $request->validate([
-            'type_financement' => 'required|string',
+            'type_financement' => 'required|string|max:255',
             'montant' => 'required|numeric',
-            'principale' => 'required|string',
-            'montant_usd' => 'required|numeric',
-            'partenaire' => 'required|integer',
-            'statut' => 'required|string',
-            'programme_id' => 'required|integer',
+            'montant_usd' => 'nullable|numeric',
+            'organisation_id' => 'required|integer|exists:organisations,id',
+            'statut' => 'required|string|max:50',
+            'programme_id' => 'required|integer|exists:programmes,id',
         ]);
 
+        // Étape 2 : Créer un nouvel enregistrement de financement
         $financement = Financement::create([
             'type_financement' => $validatedData['type_financement'],
             'montant' => $validatedData['montant'],
-            'principale' => $validatedData['principale'],
-            'montant_usd' => $validatedData['montant_usd'],
-            'organisation_id' => $validatedData['partenaire'],
+            'montant_usd' => $validatedData['montant_usd'] ?? null,
+            'organisation_id' => $validatedData['organisation_id'],
             'statut' => $validatedData['statut'],
             'programme_id' => $validatedData['programme_id'],
         ]);
 
+        // Étape 3 : Retourner la réponse JSON
         return response()->json([
             'message' => 'Financement créé avec succès',
             'data' => $financement
         ], 201);
     }
+
 
     /**
      * Display the specified resource.
