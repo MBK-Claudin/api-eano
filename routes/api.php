@@ -30,15 +30,18 @@ Route::get('user/activitebudgetannuel/{id}', [UserController::class, 'userActivi
 Route::get('user/affectations/{id}', [UserController::class, 'affectations']);
 Route::get('user/taches/{id}', [UserController::class, 'taches']);
 
-// Routes Users
+// Routes Admin
+Route::post('insert/user/', [UserController::class, 'insertuserAD']);
+Route::post('insert/role/', [UserController::class, 'insertRole']);
+
+// Routes User
 Route::get('users', [UserController::class, 'users'])->name('users');
 Route::put('user/updateprogramme/{id}', [UserController::class,'updateContributeurs']);
 Route::get('users/programme/{id}', [UserController::class, 'usersProgramme'])->name('users.programme');
 Route::get('/programmes/{programme_id}/users/{user_id}', [UserController::class, 'removeContributeurFromProgramme'])->name('users.delete');
-
 Route::post('insert/contributeur/', [UserController::class, 'insertContributeurs'])->name('users.insert');
+Route::post('insert/contributeuractivite/', [UserController::class, 'insertContributeuractivite']);
 Route::post('login/mail/', [UserController::class, 'logins']);
-
 Route::post('user/organisation', [UserController::class, 'userOrganisation']);
 
 // Routes Organisations
