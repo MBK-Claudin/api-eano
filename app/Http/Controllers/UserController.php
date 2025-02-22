@@ -6,6 +6,7 @@ use App\Models\activiteBudgetAnnuel;
 use App\Models\objectif;
 use App\Models\organisation;
 use App\Models\programme;
+use App\Models\activite;
 use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Validator;
@@ -27,9 +28,6 @@ class UserController extends Controller
         $programme = programme::with('users.organisations')->find($id);
         return response()->json($programme->users);
     }
-
-
-
 
     public function insertContributeurs (Request $request) {
 
@@ -59,6 +57,121 @@ class UserController extends Controller
 
         $user->save();
         $user->programmes()->attach($programme->id, ['role' => $request->role]);
+
+        $organisation = organisation::where('libelle',$request->organisations)->first();
+
+        if($organisation){
+
+            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
+            return response()->json($user);
+        }else{
+
+            $organisation = organisation::create([
+                'libelle' => $request->organisations,
+            ]);
+
+            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
+            return response()->json($user);
+        }
+    }
+
+
+    public function insertRole(Request $request)
+    {
+        // Valider les données
+        $request->validate([
+            'nomRole' => 'required|string|unique:roles,nomRole|max:255',
+        ]);
+
+        // Créer le rôle si la validation passe
+        $role = Role::create([
+            'nomRole' => $request->nomRole,
+        ]);
+
+        // Retourner une réponse
+        return response()->json([
+            'message' => 'Rôle créé avec succès',
+            'role' => $role
+        ], 200);
+    }
+
+
+    public function insertuserAD (Request $request) {
+
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make('CGP@2024'),
+
+        ]);
+
+        if ($request->hasFile('photo')) {
+            // Récupération du fichier uploadé
+            $image = $request->file('photo');
+
+            // Génération d'un nom unique pour l'image
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Déplacement du fichier vers le répertoire public/assets/images
+            $destinationPath = public_path('/assets/images/');
+            $image->move($destinationPath, $imageName);
+
+            // Enregistrement du chemin de l'image (URL) dans la base de données
+            $user->photo_url = asset('/assets/images/' . $imageName);
+        }
+
+        $user->save();
+
+        $organisation = organisation::where('libelle',$request->organisations)->first();
+
+        if($organisation){
+
+            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
+            return response()->json($user);
+        }else{
+
+            $organisation = organisation::create([
+                'libelle' => $request->organisations,
+            ]);
+
+            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
+            return response()->json($user);
+        }
+    }
+
+
+
+
+
+    public function insertContributeuractivite (Request $request) {
+
+        $activite = activite::find($request->activite_id);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make('CGP@2024'),
+
+        ]);
+
+        if ($request->hasFile('photo')) {
+            // Récupération du fichier uploadé
+            $image = $request->file('photo');
+
+            // Génération d'un nom unique pour l'image
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Déplacement du fichier vers le répertoire public/assets/images
+            $destinationPath = public_path('/assets/images/');
+            $image->move($destinationPath, $imageName);
+
+            // Enregistrement du chemin de l'image (URL) dans la base de données
+            $user->photo_url = asset('/assets/images/' . $imageName);
+        }
+
+        $user->save();
+        $user->activites()->attach($activite->id, ['role' => $request->role]);
 
         $organisation = organisation::where('libelle',$request->organisations)->first();
 
@@ -142,6 +255,8 @@ class UserController extends Controller
     }
 
 
+
+
     public function userOrganisation(Request $request){
 
         $request->validate([
@@ -182,6 +297,9 @@ class UserController extends Controller
             'livrable'=> $livrable->livrables,
         ]);
     }
+
+
+
 
 
 
@@ -228,6 +346,7 @@ class UserController extends Controller
             ]
         ]);
     }
+
 
 
 
