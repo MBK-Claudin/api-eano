@@ -20,6 +20,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array<int, string>
      */
+
+
     protected $fillable = [
         'azure_id',
         'photo_url',
@@ -28,6 +30,9 @@ class User extends Authenticatable implements JWTSubject
         'azure_token',
         'azure_refresh_token',
         'password',
+        'entreprise',
+        'statut',
+        'mot_de_passe_expire',
     ];
 
     /**

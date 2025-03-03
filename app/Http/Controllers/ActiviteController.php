@@ -71,6 +71,8 @@ class ActiviteController extends Controller
         return response()->json($activite->activites);
     }
 
-
-  
+    public function getActivitiesByProgramme($programme_id) {
+        $activities = activite::where('programme_id', $programme_id)->get();
+        return response()->json($activities);
+    }
 }

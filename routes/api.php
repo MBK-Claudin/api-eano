@@ -31,7 +31,7 @@ Route::get('user/affectations/{id}', [UserController::class, 'affectations']);
 Route::get('user/taches/{id}', [UserController::class, 'taches']);
 
 // Routes Admin
-Route::post('insert/user/', [UserController::class, 'insertuserAD']);
+Route::post('insert/user/', [UserController::class, 'storeusers']);
 Route::post('insert/role/', [UserController::class, 'insertRole']);
 
 // Routes User
@@ -111,6 +111,8 @@ Route::get('activite/phases', [ActiviteController::class, 'getPhase']);
 Route::get('activite/sites', [ActiviteController::class, 'getSites']);
 Route::get('activite', [ActiviteController::class, 'getJalon']);
 Route::get('activite/activitebudgetannuel/{id}', [ActiviteController::class, 'jalonActivite']);
+Route::get('Activite/{id}', [ActiviteController::class, 'getActivitiesByProgramme']);
+
 
 // Routes livrable
 Route::post('insert/livrable', [livrableController::class, 'insertLivrable']);
@@ -157,4 +159,3 @@ Route::post('/financement/insert', [FinancementController::class, 'store']);
 Route::get('financement/show/{id}', [FinancementController::class, 'show']);
 Route::put('financement/update/{id}', [FinancementController::class, 'update']);
 Route::delete('financement/delete/{id}', [FinancementController::class, 'destroy']);
-

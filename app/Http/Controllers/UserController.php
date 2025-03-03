@@ -75,75 +75,6 @@ class UserController extends Controller
         }
     }
 
-
-    public function insertRole(Request $request)
-    {
-        // Valider les données
-        $request->validate([
-            'nomRole' => 'required|string|unique:roles,nomRole|max:255',
-        ]);
-
-        // Créer le rôle si la validation passe
-        $role = Role::create([
-            'nomRole' => $request->nomRole,
-        ]);
-
-        // Retourner une réponse
-        return response()->json([
-            'message' => 'Rôle créé avec succès',
-            'role' => $role
-        ], 200);
-    }
-
-
-    public function insertuserAD (Request $request) {
-
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make('CGP@2024'),
-
-        ]);
-
-        if ($request->hasFile('photo')) {
-            // Récupération du fichier uploadé
-            $image = $request->file('photo');
-
-            // Génération d'un nom unique pour l'image
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-
-            // Déplacement du fichier vers le répertoire public/assets/images
-            $destinationPath = public_path('/assets/images/');
-            $image->move($destinationPath, $imageName);
-
-            // Enregistrement du chemin de l'image (URL) dans la base de données
-            $user->photo_url = asset('/assets/images/' . $imageName);
-        }
-
-        $user->save();
-
-        $organisation = organisation::where('libelle',$request->organisations)->first();
-
-        if($organisation){
-
-            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
-            return response()->json($user);
-        }else{
-
-            $organisation = organisation::create([
-                'libelle' => $request->organisations,
-            ]);
-
-            $user->organisations()->attach($organisation->id, ['poste' => $request->poste]);
-            return response()->json($user);
-        }
-    }
-
-
-
-
-
     public function insertContributeuractivite (Request $request) {
 
         $activite = activite::find($request->activite_id);
@@ -439,6 +370,61 @@ public function removeContributeurFromProgramme($programme_id, $user_id)
         'user_id' => $user_id,
     ], 200);
 }
+
+//administration des utilisateurs
+
+
+
+public function storeusers(Request $request)
+{
+    $user = User::create([
+        'name' => $request->nom,
+        'email' => $request->email,
+        'date_naissance' => $request->dateNaissance,
+        'statut' => $request->statut,
+        'mot_de_passe_expire' => $request->motDePasseExpire,
+        'password' => Hash::make($request->password),
+    ]);
+
+    $roles = Role::whereIn('code', $request->profils)->pluck('id');
+    foreach ($roles as $roleId) {
+        $user->roles()->attach($roleId, ['created_at' => now(), 'updated_at' => now()]);
+    }
+
+    return response()->json($user->load('roles'), 201);
+}
+
+
+
+public function update(Request $request, User $user)
+{
+    $user->update([
+        'nom' => $request->nom,
+        'email' => $request->email,
+        'date_naissance' => $request->dateNaissance,
+        'statut' => $request->statut,
+        'mot_de_passe_expire' => $request->motDePasseExpire,
+        'password' => $request->password ? Hash::make($request->password) : $user->password,
+    ]);
+
+    $roles = Role::whereIn('code', $request->profils)->pluck('id');
+    $user->roles()->sync([]);
+    foreach ($roles as $roleId) {
+        $user->roles()->attach($roleId, ['created_at' => now(), 'updated_at' => now()]);
+    }
+
+    return response()->json($user->load('roles'), 200);
+}
+
+public function destroy(User $user)
+{
+    $user->delete();
+    return response()->json(['message' => 'Utilisateur supprimé']);
+}
+
+
+
+
 
 
 

@@ -9,7 +9,8 @@ class Role extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nomRole'
+        'code',
+        'profils'
     ];
 
     public function users()
