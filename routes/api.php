@@ -33,6 +33,8 @@ Route::get('user/taches/{id}', [UserController::class, 'taches']);
 // Routes Admin
 Route::post('insert/user/', [UserController::class, 'storeusers']);
 Route::post('insert/role/', [UserController::class, 'insertRole']);
+Route::post('user/edit/{id}', [UserController::class, 'update']);
+
 
 // Routes User
 Route::get('users', [UserController::class, 'users'])->name('users');
